@@ -1,9 +1,4 @@
-﻿const eventTable = document.getElementById("event-table");
-const eventTableHeader = document.getElementById("event-table-header");
-const eventTableBody = document.getElementById("event-table-body");
-/**/
-const login = JSON.parse(localStorage.getItem("user"));
-console.log(login);
+﻿// Added all below to event-modify.js
 
 /* Load User Data */
 async function loadUser(userId) {
@@ -13,13 +8,16 @@ async function loadUser(userId) {
         if (!response.ok) {
             throw new Error(`HTTP Error: ${response.status}`);
         }
-
+        // Retrieve user data
         const userJson = await response.json();
 
-        /* Update localStorage */
+        // Update localStorage
         localStorage.removeItem("user");
         localStorage.setItem("user", JSON.stringify(userJson));
-        loadEvents(userJson);
+
+        if (window.location.pathname === "/pages/event-list.html") {
+            loadEvents(userJson);
+        }
 
     } catch (error) {
         console.error(error);
@@ -38,7 +36,7 @@ async function loadEvents(user) {
         const loadedEvents = await response.json();
         let eventQueue;
 
-        if (window.location.pathname === "/pages/list.html") {
+        if (window.location.pathname === "/pages/event-list.html") {
             /* Load all events */
             eventQueue = loadedEvents;
         } else if (user.events === 0) {
@@ -58,14 +56,14 @@ async function loadEvents(user) {
             return;
         }
 
-        populateForm(eventQueue);
+        populateTable(eventQueue);
     } catch (error) {
         console.error(error);
     }
 }
 
-/* Populate Form */
-function populateForm(eventQueue) {
+/* Populate Event Table */
+function populateTable(eventQueue) {
     const tbody = document.querySelector("#event-table tbody");
 
     tbody.innerHTML = "";
@@ -78,15 +76,15 @@ function populateForm(eventQueue) {
         const button = document.createElement("button");
 
         /* Determine if Modify Page or Adventure Page */
-        if (window.location.pathname === "/pages/list.html") {
+        if (window.location.pathname === "/pages/event-list.html") {
             button.textContent = "Modify";
             button.addEventListener("click", () => {
-                window.location.href = `modify.html?id=${event.id}`;
+                window.location.href = `event-modify.html?id=${event.id}`;
             });
         } else {
             button.textContent = "Go!";
             button.addEventListener("click", () => {
-                window.location.href = `goevent.html?id=${event.id}`;
+                window.location.href = `event-go.html?id=${event.id}`;
             });
         }
 
@@ -99,24 +97,11 @@ function populateForm(eventQueue) {
     });
 }
 
-/* Load Events */
-/*
-async function loadEvents() {
-    try {
-        const response = await fetch("/api/events");
-
-        if (!response.ok) {
-            throw new Error(`HTTP Error: ${response.status}`);
-        }
-
-        const loadedEvents = await response.json();
-        populateForm(eventQueue);
-    } catch (error) {
-        console.error(error);
-    }
-}
-*/
-
+/* Event List Load 
+const login = JSON.parse(localStorage.getItem("user"));
+console.log(login);
 document.addEventListener("DOMContentLoaded", () => {
+    // Load user Id from localStorage 
     loadUser(login.id);
 });
+*/

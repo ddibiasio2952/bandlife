@@ -240,7 +240,7 @@ th {
     border: 1px solid var(--border);
 }
 
-#description {
+#outcome-info #description {
     display: flex;
     flex-direction: row;
     justify-content: center;

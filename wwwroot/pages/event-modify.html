@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="template page" />
+    <link rel="stylesheet" href="../css/bandlife.css" />
+    <title>BandLife Modify Event</title>
+</head>
+
+<body>
+    <main>
+        <div class="wrapper">
+            <header class="main-head">
+            </header>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href=".\home.html" class="nav-link">Home</a></li>
+                    <li><a href="" class="nav-link">Profile</a></li>
+                    <li><a href=".\events.html" class="nav-link">Events</a></li>
+                    <li><a href=".\event-add.html" class="nav-link">Add</a></li>
+                    <li><a href=".\event-list.html" class="nav-link on">List</a></li>
+                </ul>
+            </nav>
+            <article class="content">
+                <h1 class="content-head">Modify Event</h1>
+
+                <section>
+                    <form id="modify-event">
+                        <fieldset>
+                            <label for="id">Id</label>
+                            <input type="number" id="id" disabled required />
+                            <label for="name">Name</label>
+                            <input type="text" id="name" required />
+                            <label for="description">Description</label>
+                            <textarea id="description" minlength="3" rows="4" required></textarea>
+
+                            <label for="option-one">Option 1</label>
+                            <textarea class="options" id="option-one" minlength="3" rows="4" required></textarea>
+                            <label for="option-two">Option 2</label>
+                            <textarea class="options" id="option-two" minlength="3" rows="4" required></textarea>
+                            <label for="option-three">Option 3</label>
+                            <textarea class="options" id="option-three" minlength="3" rows="4"></textarea>
+                            <label for="option-four">Option 4</label>
+                            <textarea class="options" id="option-four" minlength="3" rows="4"></textarea>
+
+                            <label for="outcome-one">Outcome 1</label>
+                            <textarea class="outcomes" id="outcome-one" minlength="3" rows="4" required></textarea>
+                            <label for="outcome-two">Outcome 2</label>
+                            <textarea class="outcomes" id="outcome-two" minlength="3" rows="4" required></textarea>
+                            <label for="outcome-three">Outcome 3</label>
+                            <textarea class="outcomes" id="outcome-three" minlength="3" rows="4"></textarea>
+                            <label for="outcome-four">Outcome 4</label>
+                            <textarea class="outcomes" id="outcome-four" minlength="3" rows="4"></textarea>
+
+                            <label for="members-one">Members 1</label>
+                            <input type="number" class="members" id="members-one" required />
+                            <label for="members-two">Members 2</label>
+                            <input type="number" class="members" id="members-two" required />
+                            <label for="members-three">Members 3</label>
+                            <input type="number" class="members" id="members-three" />
+                            <label for="members-four">Members 4</label>
+                            <input type="number" class="members" id="members-four" />
+
+                            <label for="job-one">Job 1</label>
+                            <input type="text" class="job" id="job-one" required />
+                            <label for="job-two">Job 2</label>
+                            <input type="text" class="job" id="job-two" required />
+                            <label for="job-three">Job 3</label>
+                            <input type="text" class="job" id="job-three" />
+                            <label for="job-four">Job 4</label>
+                            <input type="text" class="job" id="job-four" />
+
+                            <label for="job-income-one">Job Income 1</label>
+                            <input type="number" class="job-income" id="income-one" required />
+                            <label for="job-income-two">Job Income 2</label>
+                            <input type="number" class="job-income" id="income-two" required />
+                            <label for="job-income-three">Job Income 3</label>
+                            <input type="number" class="job-income" id="income-three" />
+                            <label for="job-income-four">Job Income 4</label>
+                            <input type="number" class="job-income" id="income-four" />
+
+                            <label for="band-income-one">Band Income 1</label>
+                            <input type="number" class="band-income" id="band-income-one" required />
+                            <label for="band-income-two">Band Income 2</label>
+                            <input type="number" class="band-income" id="band-income-two" required />
+                            <label for="band-income-three">Band Income 3</label>
+                            <input type="number" class="band-income" id="band-income-three" />
+                            <label for="band-income-four">Band Income 4</label>
+                            <input type="number" class="band-income" id="band-income-four" />
+
+                            <label for="popularity-one">Popularity 1</label>
+                            <input type="text" class="popularity" id="popularity-one" required />
+                            <label for="popularity-two">Popularity 2</label>
+                            <input type="text" class="popularity" id="popularity-two" required />
+                            <label for="popularity-three">Popularity 3</label>
+                            <input type="text" class="popularity" id="popularity-three" />
+                            <label for="popularity-four">Popularity 4</label>
+                            <input type="text" class="popularity" id="popularity-four" />
+
+                            <label for="listeners-one">Listeners 1</label>
+                            <input type="number" class="listeners" id="listeners-one" required />
+                            <label for="listeners-two">Listeners 2</label>
+                            <input type="number" class="listeners" id="listeners-two" required />
+                            <label for="listeners-three">Listeners 3</label>
+                            <input type="number" class="listeners" id="listeners-three" />
+                            <label for="listeners-four">Listeners 4</label>
+                            <input type="number" class="listeners" id="listeners-four" />
+
+                            <button type="button" id="modify-button">Modify</button>
+
+                        </fieldset>
+                    </form>
+                </section>
+            </article>
+            <footer class="main-footer">
+                <address>
+                    <p>Contact Webmaster: <a href="mailto:email" id="email">email</a></p>
+                </address>
+            </footer>
+        </div>
+    </main>
+</body>
+
+</html>
+<script src="..\js\event-modify.js"></script>

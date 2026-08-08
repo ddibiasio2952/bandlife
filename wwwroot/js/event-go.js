@@ -1,7 +1,5 @@
-﻿const modifyEventForm = document.getElementById("modify-event");
-const params = new URLSearchParams(window.location.search);
+﻿const params = new URLSearchParams(window.location.search);
 const eventId = params.get("id");
-const modifyButton = document.getElementById("modify-button");
 
 /* Load Event by Id */
 async function loadEventAction(eventId) {
@@ -21,28 +19,32 @@ async function loadEventAction(eventId) {
     }
 }
 
-/* Populate Form */
+/* Populate Option Form */
 function renderOptions(loadedEvent) {
+    // Select and fill Event Name and Description Fields
     const nameField = document.querySelector("#name");
     nameField.innerHTML = loadedEvent.name;
 
     const descriptionField = document.querySelector("#description");
     descriptionField.innerHTML = loadedEvent.description;
 
-
-    const container = document.getElementById("choose-outcome")
+    // Select container element for Event Options
+    const container = document.getElementById("choose-option")
     container.innerHTML = "";
 
+    // Create a container row for each Event Option
     loadedEvent.options.forEach((option, index) => {
+        // Create container row elements
         const div = document.createElement("div");
-
         const button = document.createElement("button");
         button.textContent = "Go";
 
+        // Add Event Listener to Option Button
         button.addEventListener("click", () => {
+            // Apply Outcome to User Data
             console.log(loadedEvent.outcomes[index]),
-            getUpdateUser
-            sendOutcome(loadedEvent.outcomes[index])
+            const userJson = loadUser;
+            applyOutcome(loadedEvent.outcomes[index], userData)
         });
 
         container.appendChild(button);
@@ -57,7 +59,7 @@ function renderOptions(loadedEvent) {
 }
 
 /* Send Option Button */
-async function sendOption(option) {
+async function applyOutcome(option) {
     /*
     try {
         const response = await fetch(`/api/user/status`, {
@@ -66,6 +68,34 @@ async function sendOption(option) {
     }
     */
 }
+
+/* Load User Data */ // API
+async function loadUser(userId) {
+    try {
+        const response = await fetch(`/api/users/${userId}`)
+
+        if (!response.ok) {
+            throw new Error(`HTTP Error: ${response.status}`);
+        }
+        // Retrieve user data
+        const userJson = await response.json();
+
+        // Update localStorage
+        localStorage.removeItem("user");
+        localStorage.setItem("user", JSON.stringify(userJson));
+
+        
+        // Load Event list if on Event List page
+        if (window.location.pathname === "/pages/event-list.html") {
+            loadEvents(userJson);
+        } else {
+            return userJson;
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 /* Modified Data */
 function getModifyData() {
     return {
@@ -95,21 +125,6 @@ async function Event(eventData) {
         throw new Error(`Update failed: ${response.status}`);
     }   
 }
-
-/* Modify Event Button */
-/*modifyButton.addEventListener("click", async () => {
-    const modifiedEvent = getModifyData(eventId);
-
-    try {
-        await modifyEvent(modifiedEvent);
-
-        console.log(modifiedEvent);
-        window.location.href = 'list.html';
-    } catch (error) {
-        console.error(error);
-        alert("Unable to modify event.");
-    }
-});*/
 
 /* Page Load */
 document.addEventListener("DOMContentLoaded", () => {

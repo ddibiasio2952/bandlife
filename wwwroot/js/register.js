@@ -66,7 +66,13 @@ registerForm.addEventListener("submit", async (event) => {
             .filter(value => value !== ""),
         status: [],
         members: 1,
-        events: 0
+        events: 0,
+        job: "Jobless",
+        jobincome: 0,
+        bandincome: 0,
+        popularity: "\"Who?\"",
+        listeners: 0,
+        releases: []
     };
 
     try {
@@ -91,7 +97,7 @@ registerForm.addEventListener("submit", async (event) => {
         alert("Registration successful!");
         /* Save Band Login */
         localStorage.setItem("band", user.band);
-        window.location.href = '../pages/home.html';
+        window.location.href = './pages/home.html';
     }
     catch (error) {
         console.error(error);
