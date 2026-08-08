@@ -1,0 +1,20 @@
+@BandLife_HostAddress = https://localhost:7094
+
+GET {{BandLife_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+POST {{BandLife_HostAddress}}/api/todoitems
+Content-Type: application/json
+
+{
+  "name": "study programming",
+  "isComplete": false
+}
+
+###
+
+GET {{BandLife_HostAddress}}/api/todoitems
+
+###

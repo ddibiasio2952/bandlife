@@ -1,0 +1,285 @@
+/* defaults */
+:root {
+    --text: #d4d4d4;
+    --nav-index: #d4d4d4;
+    --nav-biography: #4d21ff;
+    --nav-releases: #f21515;
+    --nav-contact: #edb943;
+    --background: #121314;
+    --border: #edb943;
+    --button-text: #121314;
+    --button-background: #f21515;
+    --button-hover-text: #edb943;
+    --button-active-text: #edb943;
+    --button-active-background: #121314;
+    --a-text-hover: #edb943;
+    --focus: #4d21ff;
+}
+
+html {
+    background-color: var(--background);
+    color: var(--text);
+    font-size: 16px;
+}
+
+/*/\/\/\ MAIN LAYOUT SCHEMA /\/\/\*/
+/* Grid Properties */
+.wrapper {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    grid-template-areas:
+        "header"
+        "nav"
+        "content"
+        "footer";
+}
+/*\/\/\/ MAIN LAYOUT SCHEMA \/\/\/*/
+
+/* Grid Properties */
+/* Header */
+.main-head {
+    /* Properties */
+    grid-area: header;
+    font-size: 3rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Navbar */
+.main-nav {
+    grid-area: nav;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: 0;
+}
+.main-nav ul {
+    list-style: none;
+    margin: 0 auto;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.main-nav li a {
+    /* Nav Buttons */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Flex display allows button customization */
+    text-decoration: none;
+    margin: 0 0.6rem;
+    padding: 1rem;
+    width: 3rem;
+    height: 1rem;
+    background-color: var(--a-background);
+    border: .1rem solid var(--border);
+    border-radius: 3%;
+    color: var(--text);
+}
+
+/* Content */
+.content {
+    grid-area: content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+h4 {
+    margin: -.5rem auto;
+}
+
+#outcome-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 1rem;
+    padding: 1rem;
+    width: 55vw;
+    border: 0.1rem dotted var(--border);
+}
+
+/* Login */
+.modal-login {
+    display: none;
+}
+
+.modal-login.open {
+    display: flex;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30rem;
+    max-width: 90%;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    background-color: var(--background);
+    opacity: 1;
+    border: 1px solid var(--border);
+    border-radius: 40px;
+}
+
+.modal-content {
+    z-index: 1;
+}
+
+
+/* Form */
+.content-head, .login-content-subheader {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-content-subheader span {
+    color: var(--a-text-hover);
+    cursor: pointer;
+}
+
+form {
+    margin: 0 auto;
+    padding: 0;
+    width: 60vw;
+}
+
+#choose-outcome div {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: -0.5rem;
+    border-bottom: 0.1rem dashed var(--border);
+    padding-bottom: 0.2rem;
+    cursor: pointer !important;
+}
+
+#choose-outcome div:first-child {
+    margin: 0 auto;
+}
+
+#choose-outcome div:last-of-type {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-bottom: none;
+    padding-bottom: 0.2rem;
+}
+
+fieldset {
+    border: 0.1rem solid var(--border);
+}
+
+label {
+    display: flex;
+    flex-direction: column;
+}
+
+label,
+input,
+button,
+select {
+    box-sizing: border-box;
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    color: var(--text);
+    background-color: var(--background);
+    border: 0.1rem solid var(--border);
+    margin: 0.3rem 0;
+    /*font-family: 'Segoe UI', 'Segoe UI Historic', sans-serif;*/
+}
+
+button {
+    display: block;
+    padding: 0.4rem 1rem;
+    margin: 0.9rem auto;
+    color: var(--button-text);
+    background-color: var(--border);
+    cursor: pointer;
+}
+
+button:hover {
+    color: var(--button-hover-text);
+    background-color: transparent;
+}
+
+button:active {
+    color: var(--button-active-text);
+    background-color: transparent;
+}
+
+input:focus,
+textarea:focus {
+    outline: 0.1rem solid var(--focus);
+}
+
+
+/* Table */
+table {
+    text-align: center;
+    /*border: 1px solid var(--border) !important;*/
+}
+
+th {
+    width: 20rem;
+    padding: 0.5rem 0;
+    border: 1px solid var(--border);
+}
+
+#description {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-indent: 0.5rem;
+    width: 50vw !important;
+}
+
+th:first-of-type {
+    /* Id Column */
+    width: 6rem;
+    border: 1px solid var(--border);
+}
+
+th:last-of-type {
+    /* Modify Column */
+    width: 6rem;
+    /*border-bottom: none;*/
+}
+
+td {
+    border: 1px solid var(--border);
+}
+
+tr:hover {
+    background-color: rgb(57, 57, 57);
+}
+
+tbody tr:last-of-type td {
+    /*border-bottom: none;*/
+}
+
+
+/* Footer */
+.main-footer {
+    grid-area: footer;
+
+    a {
+        color: var(--nav-contact);
+        text-decoration: none;
+    }
+}

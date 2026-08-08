@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="template page" />
+    <link rel="stylesheet" href="../css/bandlife.css" />
+    <title>BandLife Modify Event</title>
+</head>
+
+<body>
+    <main>
+        <div class="wrapper">
+            <header class="main-head">
+            </header>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href=".\home.html" class="nav-link">Home</a></li>
+                    <li><a href="" class="nav-link">Profile</a></li>
+                    <li><a href=".\events.html" class="nav-link">Event</a></li>
+                    <li><a href=".\add.html" class="nav-link on">Add</a></li>
+                    <li><a href=".\list.html" class="nav-link">List</a></li>
+                </ul>
+            </nav>
+            <article class="content">
+                <h1 class="content-head">Modify Event</h1>
+
+                <section>
+                    <form id="modify-event">
+                        <fieldset>
+                            <label for="id">Id</label>
+                            <input type="number" id="id" required />
+                            <label for="name">Name</label>
+                            <input type="text" id="name" spellcheck="false" required />
+                            <label for="description">Description</label>
+                            <input type="text" id="description" spellcheck="false" required />
+
+                            <label for="optionOne">Option 1</label>
+                            <textarea class="option" id="option-one" spellcheck="false" minlength="3" rows="4" required></textarea>
+                            <label for="optionTwo">Option 2</label>
+                            <textarea class="option" id="option-two" spellcheck="false" minlength="3" rows="4" required></textarea>
+                            <label for="optionThree">Option 3</label>
+                            <textarea class="option" id="option-three" spellcheck="false" minlength="3" rows="4"></textarea>
+                            <label for="optionFour">Option 4</label>
+                            <textarea class="option" id="option-four" spellcheck="false" minlength="3" rows="4"></textarea>
+
+                            <label for="outcomeOne">Outcome 1</label>
+                            <textarea class="outcome" id="outcome-one" spellcheck="false" minlength="3" rows="4" required></textarea>
+                            <label for="outcomeTwo">Outcome 2</label>
+                            <textarea class="outcome" id="outcome-two" spellcheck="false" minlength="3" rows="4" required></textarea>
+                            <label for="outcomeThree">Outcome 3</label>
+                            <textarea class="outcome" id="outcome-three" spellcheck="false" minlength="3" rows="4"></textarea>
+                            <label for="outcomeFour">Outcome 4</label>
+                            <textarea class="outcome" id="outcome-four" spellcheck="false" minlength="3" rows="4"></textarea>
+
+                            <button type="button" id="modify-button">Modify</button>
+
+                        </fieldset>
+                    </form>
+                </section>
+            </article>
+            <footer class="main-footer">
+                <address>
+                    <p>Contact Webmaster: <a href="mailto:email" id="email">email</a></p>
+                </address>
+            </footer>
+        </div>
+    </main>
+</body>
+
+</html>
+<script src="..\js\modify.js"></script>
