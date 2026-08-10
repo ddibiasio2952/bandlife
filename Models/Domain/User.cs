@@ -14,5 +14,12 @@ namespace BandLife.Models.Domain
         public required List<string> Status { get; set; } = new List<string>();
         public required int Members { get; set; }
         public required int Events { get; set; }
+        public required string Job { get; set; }
+        public required int JobIncome { get; set; }
+        public required int BandIncome { get; set; }
+        public required string Popularity { get; set; }
+        public required int Listeners { get; set; }
+        public required List<string> Releases { get; set; } = new List<string>();
+
     }
 }

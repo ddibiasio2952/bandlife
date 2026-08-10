@@ -152,28 +152,25 @@ form {
     width: 60vw;
 }
 
-#choose-outcome div {
+#choose-option div {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    gap: -0.5rem;
+    gap: 0.5rem;
     border-bottom: 0.1rem dashed var(--border);
     padding-bottom: 0.2rem;
     cursor: pointer !important;
 }
 
-#choose-outcome div:first-child {
-    margin: 0 auto;
+#choose-option div p {
+    text-indent: 0.5rem;
+    width: 80%;
 }
 
-#choose-outcome div:last-of-type {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    border-bottom: none;
-    padding-bottom: 0.2rem;
+#choose-option div button {
+    margin: auto;
+    align-items: flex-end;
 }
 
 fieldset {
@@ -240,7 +237,7 @@ th {
     border: 1px solid var(--border);
 }
 
-#description {
+#outcome-info #description {
     display: flex;
     flex-direction: row;
     justify-content: center;
