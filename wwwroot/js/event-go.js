@@ -1,7 +1,8 @@
 ﻿const params = new URLSearchParams(window.location.search);
 const eventId = params.get("id");
+const login = JSON.parse(localStorage.getItem("user"));
 
-/* Load Event by Id */
+/* Load Event by Id */ // API
 async function loadEventAction(eventId) {
     try {
         const response = await fetch(`/api/events/${eventId}`);
@@ -43,8 +44,7 @@ function renderOptions(loadedEvent) {
         button.addEventListener("click", () => {
             // Apply Outcome to User Data
             console.log(loadedEvent.outcomes[index]),
-            const userJson = loadUser;
-            applyOutcome(loadedEvent.outcomes[index], userData)
+            applyOutcome(loadedEvent.outcomes[index])
         });
 
         container.appendChild(button);
@@ -60,13 +60,10 @@ function renderOptions(loadedEvent) {
 
 /* Send Option Button */
 async function applyOutcome(option) {
-    /*
-    try {
-        const response = await fetch(`/api/user/status`, {
-            method: 
-        });
-    }
-    */
+    // Retrieve User Data
+    const userJson = loadUser(login.id);
+
+    console.log(userJson);
 }
 
 /* Load User Data */ // API

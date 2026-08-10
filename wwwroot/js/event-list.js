@@ -1,107 +1,90 @@
-﻿// Added all below to event-modify.js
+﻿/*******************************/
+/* EVENTS AND EVENT LIST PAGE */
+/*****************************/
 
-/* Load User Data */
-async function loadUser(userId) {
-    try {
-        const response = await fetch(`/api/users/${userId}`)
+// Imports
+import { getUser, getEvents } from "./api.js";
 
-        if (!response.ok) {
-            throw new Error(`HTTP Error: ${response.status}`);
-        }
-        // Retrieve user data
-        const userJson = await response.json();
+// Get current User data with User Id from localStorage
+const storedLogin = JSON.parse(localStorage.getItem("user"));
+const userData = await getUser(storedLogin.id);
 
-        // Update localStorage
-        localStorage.removeItem("user");
-        localStorage.setItem("user", JSON.stringify(userJson));
+// Load Events
+const loadedEvents = await getEvents();
 
-        if (window.location.pathname === "/pages/event-list.html") {
-            loadEvents(userJson);
-        }
+// Determine which Events to show
+eventChooser(loadedEvents, userData);
 
-    } catch (error) {
-        console.error(error);
+/* Choose Next Events for User */
+function eventChooser(loadedEvents, userData) {
+    // Initialize empty Event Queue
+    let eventQueue;
+
+    console.log("User's Events: ", userData.events);
+    console.log("Events: ", loadedEvents.length);
+
+    // Conditional Processing for Event Queue
+    if (window.location.pathname === "/pages/event-list.html") {
+        /* Load all events if Admin List Page */
+        eventQueue = loadedEvents;
+
+    } else if (userData.events === 0) {
+        /* Load only first event for new User */
+        eventQueue = loadedEvents.splice(0, 1);
+
+    } else if (userData.events === 1) {
+        /* Load member events */
+        eventQueue = loadedEvents.splice(1, 3);
+
+    } else if (userData.events < loadedEvents.length) {
+        eventQueue = loadedEvents.splice(userData.events, userData.events + 5);
+    } else {
+        /* Load no Events if User is caught up */
+        alert("No events available. Go write some music!");
+        return;
     }
-}
 
-/* Load User's Events */
-async function loadEvents(user) {
-    try {
-        const response = await fetch("/api/events");
-
-        if (!response.ok) {
-            throw new Error(`HTTP Error: ${response.status}`);
-        }
-
-        const loadedEvents = await response.json();
-        let eventQueue;
-
-        if (window.location.pathname === "/pages/event-list.html") {
-            /* Load all events */
-            eventQueue = loadedEvents;
-        } else if (user.events === 0) {
-            /* Load only first event */
-            eventQueue = loadedEvents.splice(0, 1);
-            console.log("You're just beginning!");
-        } else if (user.events === 1) {
-            /* Load member events */
-            eventQueue = loadedEvents.splice(1, 3);
-            console.log("eventQueue: " + eventQueue);
-            console.log("loadedEvents: " + loadedEvents);
-            console.log("You need members!");
-        } else if (user.events >= loadedEvents.length) {
-            /* Load only third event */
-            //eventQueue = loadedEvents.splice(2, 3);
-            alert("No events available.");
-            return;
-        }
-
-        populateTable(eventQueue);
-    } catch (error) {
-        console.error(error);
-    }
+    // Send Event Queue to table
+    populateEventTable(eventQueue);
 }
 
 /* Populate Event Table */
-function populateTable(eventQueue) {
+function populateEventTable(eventQueue) {
+    // Initialize and clear Event table body container
     const tbody = document.querySelector("#event-table tbody");
-
     tbody.innerHTML = "";
 
+    // Create Event row
     eventQueue.forEach(event => {
+        // Initialize row elements
         const row = document.createElement("tr");
         const idCell = document.createElement("td");
         const nameCell = document.createElement("td");
         const rightCell = document.createElement("td");
         const button = document.createElement("button");
 
-        /* Determine if Modify Page or Adventure Page */
+        /* Determine if Modify Page or User Page */
         if (window.location.pathname === "/pages/event-list.html") {
+            // Create button to modify Event
             button.textContent = "Modify";
             button.addEventListener("click", () => {
                 window.location.href = `event-modify.html?id=${event.id}`;
             });
         } else {
+            // Create button to play Event
             button.textContent = "Go!";
             button.addEventListener("click", () => {
                 window.location.href = `event-go.html?id=${event.id}`;
             });
         }
 
+        // Update row elements
         idCell.textContent = event.id;
         nameCell.textContent = event.name;
         rightCell.appendChild(button);
         row.append(idCell, nameCell, rightCell);
 
+        // Append row to table body
         tbody.appendChild(row);
     });
 }
-
-/* Event List Load 
-const login = JSON.parse(localStorage.getItem("user"));
-console.log(login);
-document.addEventListener("DOMContentLoaded", () => {
-    // Load user Id from localStorage 
-    loadUser(login.id);
-});
-*/

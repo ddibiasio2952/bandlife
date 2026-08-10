@@ -1,11 +1,29 @@
+import { postEvent } from "./api.js";
+
 const addEventForm = document.getElementById("add-event");
 
 // Added all below to event-modify.js
 
+/*******************/
+/* EVENT ADD PAGE */
+/*****************/
+
 /* Submit New Event */
+
+/* Submit New Event Button */
 addEventForm.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const addEvent = {
+
+    // Get New Event Object
+    const eventData = readAddEventForm();
+    postEvent(eventData);
+    window.location.href = './event-list.html';
+
+});
+
+/* Get Event Form Data */
+function readAddEventForm() {
+    return {
         name: document.getElementById("name").value,
         description: document.getElementById("description").value,
         options: [...document.querySelectorAll(".options")]
@@ -15,49 +33,18 @@ addEventForm.addEventListener("submit", async (event) => {
             .map(input => input.value.trim())
             .filter(value => value !== ""),
         members: [...document.querySelectorAll(".members")]
-            .map(input => input.value)
-            .filter(value => value !== 0),
+            .map(input => input.value === "" ? "0" : input.value),
         job: [...document.querySelectorAll(".job")]
             .map(input => input.value.trim())
             .filter(value => value !== ""),
         jobincome: [...document.querySelectorAll(".job-income")]
-            .map(input => input.value)
-            .filter(value => value !== 0),
+            .map(input => input.value === "" ? "0" : input.value),
         bandincome: [...document.querySelectorAll(".band-income")]
-            .map(input => input.value)
-            .filter(value => value !== 0),
+            .map(input => input.value === "" ? "0" : input.value),
         popularity: [...document.querySelectorAll(".popularity")]
             .map(input => input.value.trim())
             .filter(value => value !== ""),
         listeners: [...document.querySelectorAll(".listeners")]
-            .map(input => input.value)
-            .filter(value => value !== 0)
+            .map(input => input.value === "" ? "0" : input.value)
     };
-
-    try {
-        const response = await fetch("/api/events", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(addEvent)
-        });
-
-        if (!response.ok) {
-            const error = await response.text();
-            console.log("Status:", response.status);
-            console.log("Response:", error);
-            throw new Error("Failed to send.");
-        }
-
-        const createdEvent = await response.json();
-
-        console.log(createdEvent);
-        alert("Event creation successful!");
-        window.location.href = './pages/event-add.html';
-    }
-    catch (error) {
-        console.error(error);
-    }
-});
-
+}
