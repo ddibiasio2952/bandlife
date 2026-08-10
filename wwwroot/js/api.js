@@ -6,7 +6,7 @@
 /* GET APIS */
 /***********/
 
-/* Get User Data */ 
+/* Get User data by Id */ 
 export async function getUser(userId) {
     try {
         const response = await fetch(`/api/users/${userId}`)
@@ -23,6 +23,23 @@ export async function getUser(userId) {
 
         return userData;
 
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+/* Get User data by Band Name */
+export async function getBandName(band) {
+    try {
+        const response = await fetch(`/api/users/band/${band}`);
+
+        if (!response.ok) {
+            throw new Error(`HTTP Error: ${response.status}`);
+        }
+
+        const loadedUser = await response.json();
+
+        return loadedUser;
     } catch (error) {
         console.error(error);
     }
@@ -67,7 +84,36 @@ export async function getEvents() {
 /* POST APIS */
 /************/
 
-/* Post New Event */
+/* Post new User */
+
+export async function postUser(newUserData) {
+    try {
+        const response = await fetch("/api/users", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(newUserData)
+        });
+
+        if (!response.ok) {
+            const error = await response.text();
+            console.log("Status:", response.status);
+            console.log("Response:", error);
+            throw new Error("Failed to send.");
+        }
+
+        const createdUser = await response.json();
+
+        return createdUser;
+    }
+    catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+/* Post new Event */
 export async function postEvent(eventData) {
     try {
         const response = await fetch("/api/events", {
@@ -87,11 +133,12 @@ export async function postEvent(eventData) {
 
         const createdEvent = await response.json();
 
-        console.log(createdEvent);
-        alert("Event creation successful!");
+        return createdEvent;
+        
     }
     catch (error) {
         console.error(error);
+        throw error;
     }
 }
 
@@ -99,7 +146,7 @@ export async function postEvent(eventData) {
 /* PUT APIS */
 /***********/
 
-/* Put Modified Event */
+/* Put modified Event */
 export async function modifyEvent(eventData, eventId) {
     const response = await fetch(`/api/events/${eventId}`, {
         method: "PUT",

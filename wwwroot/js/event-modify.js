@@ -18,7 +18,7 @@ const loadedEvent = await getEvent(eventId);
 // Populate inputs form with Event data
 populateForm(loadedEvent);
 
-/* Populate Modification Form */
+/* Populate Modification form */
 function populateForm(loadedEvent) {
     // Populate form with Event data
     document.getElementById("id").value = loadedEvent.id;
@@ -36,7 +36,7 @@ function populateForm(loadedEvent) {
     populateArray(".listeners", loadedEvent.listeners);
 }
 
-/* Populate Arrays in Form */
+/* Populate Arrays in form */
 function populateArray(selector, values) {
     // Get selector classes
     const inputs = document.querySelectorAll(selector);
@@ -47,9 +47,9 @@ function populateArray(selector, values) {
     });
 }
 
-/* Get Modified Event Data */
+/* Get modified Event data */
 function readModifyEventForm() {
-    // Read modified Event data from form
+    // Return modified Event data from form
     return {
         id: eventId,
         name: document.getElementById("name").value,
@@ -80,17 +80,18 @@ function readModifyEventForm() {
 /* Modify Event Button */
 modifyButton.addEventListener("click", async () => {
 
-    // Get Modified Event Data
+    // Read modified Event form
     const modifiedEvent = readModifyEventForm(eventId);
 
     try {
-        // Call API
+        // API call
         await modifyEvent(modifiedEvent, eventId);
 
         // Redirect to Event List if successful
         window.location.href = 'event-list.html';
+
     } catch (error) {
         console.error(error);
-        alert("Unable to modify event.");
+        alert("Unable to modify Event.");
     }
 });

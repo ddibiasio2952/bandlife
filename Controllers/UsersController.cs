@@ -99,8 +99,8 @@ namespace BandLife.Controllers
             // return CreatedAtAction("GetUser", new { id = user.Id }, user);
             return CreatedAtAction(
                 nameof(GetUser), 
-                new { id = user.Id }, 
-                user);
+                new { id = @user.Id }, 
+                @user);
         }
 
         // DELETE: api/Users/5

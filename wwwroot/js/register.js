@@ -1,15 +1,27 @@
+/******************************/
+/* REGISTRATION / LOGIN PAGE */
+/****************************/
+
+// Imports
+import { getBandName, postUser } from "./api.js";
+
+// Get Register form element
 const registerForm = document.getElementById("register");
-const loginForm = document.getElementById("login");
+
+// Get Login modal and form elements
+// const loginForm = document.getElementById("login");
 const openLogin = document.querySelector(".login-text");
-const closeLogin = document.getElementById("close-modal");
+
+//const closeLogin = document.getElementById("close-modal");
 const login = document.querySelector(".modal-login");
 const loginButton = document.getElementById("submit-login");
 
-/* Login Modal */
+/* Login open modal */
 openLogin.addEventListener("click", () => {
   login.classList.add("open");
 });
 
+/* Login close modal */
 document.addEventListener('click', (event) => {
   if (event.target === login) {
     // If the click is directly on the dialog backdrop or outside the dialog
@@ -17,47 +29,31 @@ document.addEventListener('click', (event) => {
   }
 });
 
-/* Submit Login */
-async function bandSearch(band) {
-    try {
-        const response = await fetch(`/api/users/band/${band}`);
-
-        if (!response.ok) {
-            throw new Error(`HTTP Error: ${response.status}`);
-        }
-
-        const loadedUser = await response.json();
-
-        return loadedUser;
-    } catch (error) {
-        console.error(error);
-    }
-}
-
-/* Search Login Button */ 
+/* Search login button */ 
 loginButton.addEventListener("click", async () => {
-    const band = document.getElementById("login-band").value;
+    // Read band name from login modal
+    const bandName = document.getElementById("login-band").value;
 
     try {
-        const user = await bandSearch(band);
+        // API call with band name
+        const userData = await getBandName(bandName);
 
-        localStorage.setItem("band", user.band); // Remove???
-        localStorage.setItem("user", JSON.stringify(user));
-        console.log("Logged in");
-        console.log(user);
+        // Store User data to localStorage
+        localStorage.setItem("user", JSON.stringify(userData));
+
+        // Redirect to Home if successful
         window.location.href = './pages/home.html';
+
     } catch (error) {
         console.error(error);
         alert("Unable to find band.");
     }
 });
 
-
-
-/* Submit Registration */
-registerForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const user = {
+/* Get new User form data */
+function readNewUserForm() {
+    // Return new User data from form
+    return {
         email: document.getElementById("email").value,
         band: document.getElementById("band").value,
         instrument: document.getElementById("instrument").value,
@@ -74,33 +70,30 @@ registerForm.addEventListener("submit", async (event) => {
         listeners: 0,
         releases: []
     };
+}
+
+/* Submit Registration */
+registerForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    // Read new User form
+    const newUserData = readNewUserForm();
 
     try {
-        const response = await fetch("/api/users", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(user)
-        });
+        // API call
+        const newUser = await postUser(newUserData);
 
-        if (!response.ok) {
-            const error = await response.text();
-            console.log("Status:", response.status);
-            console.log("Response:", error);
-            throw new Error("Failed to send.");
-        }
+        console.log(newUser);
+        // Store User data to localStorage
+        localStorage.setItem("user", JSON.stringify(newUser));
 
-        const createdUser = await response.json();
-
-        console.log(createdUser);
-        alert("Registration successful!");
-        /* Save Band Login */
-        localStorage.setItem("band", user.band);
+        // Redirect to Home if successful
         window.location.href = './pages/home.html';
+
     }
     catch (error) {
         console.error(error);
+        alert("Unable to register User.");
     }
 });
 

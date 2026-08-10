@@ -1,4 +1,9 @@
-﻿const params = new URLSearchParams(window.location.search);
+﻿/********************/
+/* EVENT PLAY PAGE */
+/******************/
+
+// Get Event Id from URL 
+const params = new URLSearchParams(window.location.search);
 const eventId = params.get("id");
 const login = JSON.parse(localStorage.getItem("user"));
 

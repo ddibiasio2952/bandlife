@@ -8,21 +8,32 @@ const addEventForm = document.getElementById("add-event");
 /* EVENT ADD PAGE */
 /*****************/
 
-/* Submit New Event */
-
-/* Submit New Event Button */
+/* Submit new Event Button */
 addEventForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    // Get New Event Object
+    // Read new Event form
     const eventData = readAddEventForm();
-    postEvent(eventData);
-    window.location.href = './event-list.html';
 
+    try {
+        // API call
+        const createdEvent = await postEvent(eventData);
+
+        console.log(createdEvent);
+        alert("Event creation successful!");
+
+        // Redirect to Event List if successful
+        window.location.href = './event-list.html';
+
+    } catch (error) {
+        console.error(error);
+        alert("Unable to add Event.");
+    }
 });
 
-/* Get Event Form Data */
+/* Get new Event form data */
 function readAddEventForm() {
+    // Return new Event data from form
     return {
         name: document.getElementById("name").value,
         description: document.getElementById("description").value,
