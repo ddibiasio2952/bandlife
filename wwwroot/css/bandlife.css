@@ -234,6 +234,35 @@ h4 {
     text-align: center;
 }
 
+.band-profile div {
+    width: auto;
+    margin: 0.2rem 0;
+}
+
+.band-profile p {
+    /* Property Label */
+    color: var(--background);
+    border: 0.1rem solid var(--border);
+    border-radius: 5px 5px 0 0;
+    background-color: var(--border);
+    margin: 0 auto; /* Connects Label and Data fields */
+    padding: 0.2rem 2rem;
+    display: block;
+    text-align: center;
+}
+
+.band-profile span {
+    /* Property Data */
+    color: var(--background);
+    border: 0.1rem solid var(--text);
+    border-radius: 0 0 5px 5px;
+    background-color: var(--text);
+    margin: 0 auto;
+    padding: 0.2rem 0;
+    display: block;
+    text-align: center;
+}
+
 #outcome-info {
     display: flex;
     flex-direction: row;

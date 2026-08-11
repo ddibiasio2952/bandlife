@@ -18,7 +18,7 @@ const loadedEvent = await getEvent(eventId);
 // Populate inputs form with Event data
 populateForm(loadedEvent);
 
-/* Populate Modification form */
+/* Populate modification form */
 function populateForm(loadedEvent) {
     // Populate form with Event data
     document.getElementById("id").value = loadedEvent.id;
