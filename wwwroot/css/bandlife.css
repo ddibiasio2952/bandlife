@@ -20,6 +20,7 @@ html {
     background-color: var(--background);
     color: var(--text);
     font-size: 16px;
+    font-family: Courier New, Courier, monospace;
 }
 
 /*/\/\/\ MAIN LAYOUT SCHEMA /\/\/\*/
@@ -46,6 +47,8 @@ html {
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    color: var(--text);
+    margin: -2rem auto;
 }
 
 /* Navbar */
@@ -77,7 +80,7 @@ html {
     height: 1rem;
     background-color: var(--a-background);
     border: .1rem solid var(--border);
-    border-radius: 3%;
+    border-radius: 5px;
     color: var(--text);
 }
 
@@ -88,10 +91,52 @@ html {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-image: linear-gradient( to bottom, var(--background) 30%, transparent), 
+        url('../images/bg-02.jpg'), 
+        linear-gradient( to bottom, transparent 50%, var(--background) );
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+h1 {
+    font-weight: normal;
+    margin: 1rem auto;
 }
 
 h4 {
+    font-weight: normal;
     margin: -.5rem auto;
+}
+
+.band-profile div {
+    width: auto;
+    margin: 0.2rem 0;
+}
+
+.band-profile p {
+    /* Property Label */
+    color: var(--background);
+    border: 0.1rem solid var(--border);
+    border-radius: 5px 5px 0 0;
+    background-color: var(--border);
+    margin: 0 auto; /* Connects Label and Data fields */
+    padding: 0.2rem 2rem;
+    display: block;
+    text-align: center;
+}
+
+.band-profile span {
+    /* Property Data */
+    color: var(--background);
+    border: 0.1rem solid var(--text);
+    border-radius: 0 0 5px 5px;
+    background-color: var(--text);
+    margin: 0 auto;
+    padding: 0.2rem 0;
+    display: block;
+    text-align: center;
 }
 
 #outcome-info {
@@ -174,6 +219,8 @@ form {
 }
 
 fieldset {
+    background: var(--background);
+    border-radius: 5px;
     border: 0.1rem solid var(--border);
 }
 

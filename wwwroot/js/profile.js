@@ -1,106 +1,62 @@
+/*****************/
+/* PROFILE PAGE */
+/***************/
+
+// Imports
+import { getUser } from "./api.js";
+
+/*
 const registerForm = document.getElementById("register");
 const loginForm = document.getElementById("login");
 const openLogin = document.querySelector(".login-text");
 const closeLogin = document.getElementById("close-modal");
 const login = document.querySelector(".modal-login");
 const loginButton = document.getElementById("submit-login");
+*/
 
-/* Login Modal */
-openLogin.addEventListener("click", () => {
-  login.classList.add("open");
-});
+// Get current User data with User Id from localStorage
+const storedLogin = JSON.parse(localStorage.getItem("user"));
+const userData = await getUser(storedLogin.id);
 
-document.addEventListener('click', (event) => {
-  if (event.target === login) {
-    // If the click is directly on the dialog backdrop or outside the dialog
-    login.classList.remove('open');
-  }
-});
+// Load User profile
+loadProfile(userData);
 
-/* Submit Login */
-async function bandSearch(band) {
-    try {
-        const response = await fetch(`/api/users/band/${band}`);
+/* Load profile */
+function loadProfile(userData) {
+    /*
+    document.getElementById("band-status").textContent = userData.status;
+    populateArray(".status", loadedEvent.status);
+    */
+    document.getElementById("band").textContent = userData.band;
+    
+    document.getElementById("genre").textContent = userData.genres[0];
+    document.getElementById("members").textContent = userData.members;
 
-        if (!response.ok) {
-            throw new Error(`HTTP Error: ${response.status}`);
-        }
+    userData.releases.length === 0 ?
+        document.getElementById("releases").textContent = 0 :
+        document.getElementById("releases").textContent = userData.releases;
+    
 
-        const loadedUser = await response.json();
+    document.getElementById("job").textContent = userData.job;
+    document.getElementById("job-income").textContent = userData.jobIncome;
 
-        return loadedUser;
-    } catch (error) {
-        console.error(error);
-    }
+    document.getElementById("band-income").textContent = userData.bandIncome;
+    document.getElementById("listeners").textContent = userData.listeners;
+    document.getElementById("popularity").textContent = userData.popularity;
 }
 
-/* Search Login Button */ 
-loginButton.addEventListener("click", async () => {
-    const band = document.getElementById("login-band").value;
+/*
+const band = document.getElementById("band");
+const bandStatus = document.getElementById("band-status");
 
-    try {
-        const user = await bandSearch(band);
+const genre = document.getElementById("genre");
+const members = document.getElementById("members");
+const releases = document.getElementById("releases");
 
-        localStorage.setItem("band", user.band); // Remove???
-        localStorage.setItem("user", JSON.stringify(user));
-        console.log("Logged in");
-        console.log(user);
-        window.location.href = './pages/home.html';
-    } catch (error) {
-        console.error(error);
-        alert("Unable to find band.");
-    }
-});
+const job = document.getElementById("job");
+const jobIncome = document.getElementById("job-income");
 
-
-
-/* Submit Registration */
-registerForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const user = {
-        email: document.getElementById("email").value,
-        band: document.getElementById("band").value,
-        instrument: document.getElementById("instrument").value,
-        genres: [...document.querySelectorAll(".genre")]
-            .map(input => input.value.trim())
-            .filter(value => value !== ""),
-        status: [],
-        members: 1,
-        events: 0,
-        job: "Jobless",
-        jobincome: 0,
-        bandincome: 0,
-        popularity: "\"Who?\"",
-        listeners: 0,
-        releases: []
-    };
-
-    try {
-        const response = await fetch("/api/users", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(user)
-        });
-
-        if (!response.ok) {
-            const error = await response.text();
-            console.log("Status:", response.status);
-            console.log("Response:", error);
-            throw new Error("Failed to send.");
-        }
-
-        const createdUser = await response.json();
-
-        console.log(createdUser);
-        alert("Registration successful!");
-        /* Save Band Login */
-        localStorage.setItem("band", user.band);
-        window.location.href = './pages/home.html';
-    }
-    catch (error) {
-        console.error(error);
-    }
-});
-
+const bandIncome = document.getElementById("band-income");
+const listeners = document.getElementById("listeners");
+const popularity = document.getElementById("popularity");
+*/
