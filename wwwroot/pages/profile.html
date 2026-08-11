@@ -4,38 +4,70 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="template page" />
+    <meta name="description" content="BandLife Profile Page" />
     <link rel="stylesheet" href="../css/bandlife.css" />
     <title>BandLife Home</title>
 </head>
 
 <body>
     <main>
-        <div class="wrapper">
-            <header class="main-head">
+        <div id="wrapper">
+            <header id="main-head">
+                <p>BandLife</p>
             </header>
-            <nav class="main-nav">
-                <ul>
-                    <li><a href=".\home.html" class="nav-link">Home</a></li>
-                    <li><a href=".\profile.html" class="nav-link on">Profile</a></li>
-                    <li><a href=".\events.html" class="nav-link">Events</a></li>
-                    <li><a href=".\event-add.html" class="nav-link">Add</a></li>
-                    <li><a href=".\event-list.html" class="nav-link">List</a></li>
-                </ul>
-            </nav>
-            <article class="content">
+            <div id="main-nav">
+            </div>
+            <article id="profile-content">
                 <h1 class="content-head">Profile</h1>
-                <section>
+                <section id="profile-text">
+                    Profile Text
+                </section>
+                <section id="profile-tabs">
+                    <div id="band-div" class="band">
+                        <p>Band</p>
+                        <span id="band"></span>
+                    </div>
+                    <div id="genre-div" class="genre">
+                        <p>Genre</p>
+                        <span id="genre"></span>
+                    </div>
+                    <div id="members-div" class="members">
+                        <p>Members</p>
+                        <span id="members"></span>
+                    </div>
+                    <div id="releases-div" class="releases">
+                        <p>Releases</p>
+                        <span id="releases">Releases</span>
+                    </div>
+                    <div id="job-div" class="job">
+                        <p>Your Job</p>
+                        <span id="job"></span>
+                    </div>
+                    <div id="job-income-div" class="job-income">
+                        <p>Your Income</p>
+                        <span id="job-income"></span>
+                    </div>
+                    <div id="band-income-div" class="band-income">
+                        <p>Band Income</p>
+                        <span id="band-income"></span>
+                    </div>
+                    <div id="listeners-div" class="listeners">
+                        <p>Listeners</p>
+                        <span id="listeners"></span>
+                    </div>
+                    <div id="popularity-div" class="popularity">
+                        <p>Popularity</p>
+                        <span id="popularity"></span>
+                    </div>
+
                 </section>
             </article>
-            <footer class="main-footer">
-                <address>
-                    <p>Contact Webmaster: <a href="mailto:email" id="email">email</a></p>
-                </address>
-            </footer>
+            <div id="main-footer">
+            </div>
         </div>
     </main>
 </body>
 
 </html>
-<script type="module" src="..\js\profile.js"></script>
+<script type="module" src="../js/profile.js"></script>
+<script type="module" src="../js/shared.js"></script>

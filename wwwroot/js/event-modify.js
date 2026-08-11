@@ -23,6 +23,7 @@ function populateForm(loadedEvent) {
     // Populate form with Event data
     document.getElementById("id").value = loadedEvent.id;
     document.getElementById("name").value = loadedEvent.name;
+    document.getElementById("category").value = loadedEvent.category;
     document.getElementById("description").value = loadedEvent.description;
 
     // Populate form with Event arrays
@@ -53,6 +54,7 @@ function readModifyEventForm() {
     return {
         id: eventId,
         name: document.getElementById("name").value,
+        category: document.getElementById("category").value,
         description: document.getElementById("description").value,
         options: [...document.querySelectorAll(".options")]
             .map(input => input.value.trim())

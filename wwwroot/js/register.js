@@ -55,6 +55,7 @@ function readNewUserForm() {
     // Return new User data from form
     return {
         email: document.getElementById("email").value,
+        name: document.getElementById("name").value,
         band: document.getElementById("band").value,
         instrument: document.getElementById("instrument").value,
         genres: [...document.querySelectorAll(".genre")]

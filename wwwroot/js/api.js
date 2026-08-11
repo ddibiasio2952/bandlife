@@ -160,3 +160,8 @@ export async function modifyEvent(eventData, eventId) {
         throw new Error(`Update failed: ${response.status}`);
     }
 }
+
+/****************/
+/* DELETE APIS */
+/**************/
+

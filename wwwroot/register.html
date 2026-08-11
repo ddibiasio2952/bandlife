@@ -4,25 +4,17 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="template page" />
+    <meta name="description" content="BandLife Registration Page" />
     <link rel="stylesheet" href="./css/bandlife.css" />
     <title>BandLife Register</title>
 </head>
 
 <body>
     <main>
-        <div class="wrapper">
-            <header class="main-head">
+        <div id="wrapper">
+            <header id="main-head">
+                <p>BandLife</p>
             </header>
-            <nav class="main-nav">
-                <ul>
-                    <li><a href=".\pages\home.html" class="nav-link">Home</a></li>
-                    <li><a href=".\profile.html" class="nav-link">Profile</a></li>
-                    <li><a href=".\pages\events.html" class="nav-link">Events</a></li>
-                    <li><a href=".\pages\event-add.html" class="nav-link">Add</a></li>
-                    <li><a href=".\pages\event-list.html" class="nav-link">List</a></li>
-                </ul>
-            </nav>
             <article class="content">
                 <h1 class="content-head">Register</h1>
                 <h4>or</h4>
@@ -44,9 +36,11 @@
                     <form id="register">
                         <fieldset>
                             <label for="email">Email</label>
-                            <input type="email" id="email" spellcheck="false" required />
+                            <input type="email" id="email" minlength="3" maxlength="50" required />
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" spellcheck="false" minlength="2" maxlength="25" required />
                             <label for="band">Band Name</label>
-                            <input type="text" id="band" spellcheck="false" required />
+                            <input type="text" id="band" spellcheck="false" minlength="1" maxlength="50" required />
                             <label for="instrument">Role</label>
                             <select for="instrument" id="instrument" required>
                                 <option value="">Select Your Role</option>
@@ -55,7 +49,7 @@
                                 <option value="Bass">Bass</option>
                                 <option value="Keyboard">Keyboard</option>
                                 <option value="Drums">Drums</option>
-                            </select>       
+                            </select>
                             <label for="genreOne">Your Band's Genre</label>
                             <input type="text" class="genre" id="genreOne" spellcheck="false" minlength="3" maxlength="25" required />
                             <label for="genreTwo">A Genre You Like</label>
@@ -64,7 +58,7 @@
                             <input type="text" class="genre" id="genreThree" spellcheck="false" minlength="3" maxlength="25" required />
                             <label for="genreFour">Another Genre You Dislike</label>
                             <input type="text" class="genre" id="genreFour" spellcheck="false" minlength="3" maxlength="25" required />
-                            
+
                             <button type="submit">Send</button>
 
                         </fieldset>
@@ -74,6 +68,7 @@
             <footer class="main-footer">
                 <address>
                     <p>Contact Webmaster: <a href="mailto:email" id="email">email</a></p>
+                    <p>&copy; 2026 BandLife</p>
                 </address>
             </footer>
         </div>
@@ -81,4 +76,5 @@
 </body>
 
 </html>
-<script type="module" src=".\js\register.js"></script>
+<script type="module" src="./js/register.js"></script>
+<script type="module" src="./js/shared.js"></script>
