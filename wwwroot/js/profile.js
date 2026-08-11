@@ -36,7 +36,6 @@ function loadProfile(userData) {
         document.getElementById("releases").textContent = 0 :
         document.getElementById("releases").textContent = userData.releases;
     
-
     document.getElementById("job").textContent = userData.job;
     document.getElementById("job-income").textContent = userData.jobIncome;
 

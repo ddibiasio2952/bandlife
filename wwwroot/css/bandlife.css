@@ -2,8 +2,7 @@
 :root {
     --text: #d4d4d4;
     --nav-index: #d4d4d4;
-    --nav-biography: #4d21ff;
-    --nav-releases: #f21515;
+    --warn: #a91b1b;
     --nav-contact: #edb943;
     --background: #121314;
     --border: #edb943;
@@ -14,6 +13,7 @@
     --button-active-background: #121314;
     --a-text-hover: #edb943;
     --focus: #4d21ff;
+    --table-hover: rgba(70, 70, 70, 0.75);
 }
 
 html {
@@ -25,7 +25,7 @@ html {
 
 /*/\/\/\ MAIN LAYOUT SCHEMA /\/\/\*/
 /* Grid Properties */
-.wrapper {
+#wrapper {
     display: grid;
     grid-template-columns: 1fr;
     gap: 2rem;
@@ -37,9 +37,23 @@ html {
 }
 /*\/\/\/ MAIN LAYOUT SCHEMA \/\/\/*/
 
+/*/\/\/\ PROFILE LAYOUT SCHEMA /\/\/\*/
+/* Grid Properties */
+#profile-wrapper {
+    display: grid;
+    grid-template-columns: 2fr;
+    gap: 2rem;
+    grid-template-areas:
+        "header" "header"
+        "nav" "nav"
+        "profile-text" "profile-tabs"
+        "footer" "footer";
+}
+/*\/\/\/ PROFILE LAYOUT SCHEMA \/\/\/*/
+
 /* Grid Properties */
 /* Header */
-.main-head {
+#main-head {
     /* Properties */
     grid-area: header;
     font-size: 3rem;
@@ -49,6 +63,11 @@ html {
     align-items: center;
     color: var(--text);
     margin: -2rem auto;
+}
+
+#log-out:hover {
+    color: var(--text);
+    background-color: var(--warn);
 }
 
 /* Navbar */
@@ -82,18 +101,44 @@ html {
     border: .1rem solid var(--border);
     border-radius: 5px;
     color: var(--text);
+    transition-duration: 0.5s;
+}
+
+.main-nav a:hover {
+    color: var(--button-hover-text);
+    background-color: var(--table-hover);
+    transition-duration: 0.5s;
+}
+
+.main-nav a:active {
+    background-color: var(--focus);
+    transition-duration: 0.5s;
+}
+
+.main-nav #log-out {
+    position: fixed;
+    width: 5rem;
+    padding: 0.3rem;
+    top: 0.8rem;
+    right: 0.5rem;
+    z-index: 1000;
 }
 
 /* Content */
-.content {
-    grid-area: content;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-image: linear-gradient( to bottom, var(--background) 30%, transparent), 
-        url('../images/bg-02.jpg'), 
-        linear-gradient( to bottom, transparent 50%, var(--background) );
+main {
+    
+    background-image: 
+        linear-gradient(to bottom, var(--background) 28%, 
+        transparent 50%, 
+        transparent 55%, var(--background) 100%), 
+        url('../images/bg-05.jpg');
+    /*
+    background-image: 
+        radial-gradient(circle, transparent 0%, 
+    var(--background) 90%, 
+    var(--background) 100%), 
+        url('../images/bg-05.jpg');
+        */
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -108,6 +153,85 @@ h1 {
 h4 {
     font-weight: normal;
     margin: -.5rem auto;
+}
+
+.content {
+    grid-area: content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /*
+    background-image: 
+        linear-gradient( to bottom, var(--background) 30%, transparent), 
+        url('../images/bg-02.jpg'), 
+        linear-gradient( to bottom, transparent 50%, var(--background) );
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    */
+}
+
+#profile-content {
+    grid-area: content;
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    align-items: flex-start;
+    /*
+    background-image: 
+        linear-gradient( to bottom, var(--background) 30%, transparent), 
+        url('../images/bg-02.jpg'), 
+        linear-gradient( to bottom, transparent 50%, var(--background) );
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    */
+}
+
+
+
+#profile-text {
+    grid-area: profile-text;
+    display: flex;
+    flex-direction: column;
+}
+
+#profile-tabs {
+    grid-area: profile-tabs;
+    display: flex;
+    flex-direction: column;
+}
+
+#profile-tabs div {
+    width: auto;
+    margin: 0.2rem 0;
+}
+
+#profile-tabs p {
+    /* Property Label */
+    color: var(--background);
+    border: 0.1rem solid var(--border);
+    border-radius: 5px 5px 0 0;
+    background-color: var(--border);
+    margin: 0 auto; /* Connects Label and Data fields */
+    padding: 0.2rem 2rem;
+    display: block;
+    text-align: center;
+}
+
+#profile-tabs span {
+    /* Property Data */
+    color: var(--background);
+    border: 0.1rem solid var(--text);
+    border-radius: 0 0 5px 5px;
+    background-color: var(--text);
+    margin: 0 auto;
+    padding: 0.2rem 0;
+    display: block;
+    text-align: center;
 }
 
 .band-profile div {
@@ -153,6 +277,7 @@ h4 {
 /* Login */
 .modal-login {
     display: none;
+    opacity: 0;
 }
 
 .modal-login.open {
@@ -161,16 +286,15 @@ h4 {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 30rem;
-    max-width: 90%;
+    width: 70%;
     height: auto;
     align-items: center;
     justify-content: center;
     z-index: 9999;
     background-color: var(--background);
-    opacity: 1;
-    border: 1px solid var(--border);
-    border-radius: 40px;
+    opacity: 0.95;
+    border: 0.1rem solid var(--border);
+    border-radius: 20px;
 }
 
 .modal-content {
@@ -189,6 +313,7 @@ h4 {
 .login-content-subheader span {
     color: var(--a-text-hover);
     cursor: pointer;
+    transition-duration: 0.3s;
 }
 
 form {
@@ -254,28 +379,31 @@ button {
     color: var(--button-text);
     background-color: var(--border);
     cursor: pointer;
+    transition-duration: 0.5s;
 }
 
 button:hover {
     color: var(--button-hover-text);
     background-color: transparent;
+    transition-duration: 0.3s;
 }
 
 button:active {
     color: var(--button-active-text);
     background-color: transparent;
+    transition-duration: 0.3s;
 }
 
 input:focus,
 textarea:focus {
     outline: 0.1rem solid var(--focus);
+    transition-duration: 0.3s;
 }
 
 
 /* Table */
 table {
     text-align: center;
-    /*border: 1px solid var(--border) !important;*/
 }
 
 th {
@@ -309,8 +437,14 @@ td {
     border: 1px solid var(--border);
 }
 
-tr:hover {
-    background-color: rgb(57, 57, 57);
+tr {
+    background-color: var(--background);
+    transition-duration: 0.5s;
+}
+
+tr:not(#event-table-header):hover {
+    background-color: var(--table-hover);
+    transition-duration: 0.5s;
 }
 
 tbody tr:last-of-type td {
@@ -320,10 +454,11 @@ tbody tr:last-of-type td {
 
 /* Footer */
 .main-footer {
+    background-color: var(--background);
     grid-area: footer;
+}
 
-    a {
-        color: var(--nav-contact);
-        text-decoration: none;
-    }
+.main-footer a {
+    color: var(--nav-contact);
+    text-decoration: none;
 }

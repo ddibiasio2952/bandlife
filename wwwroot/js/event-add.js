@@ -36,6 +36,7 @@ function readAddEventForm() {
     // Return new Event data from form
     return {
         name: document.getElementById("name").value,
+        category: document.getElementById("category").value,
         description: document.getElementById("description").value,
         options: [...document.querySelectorAll(".options")]
             .map(input => input.value.trim())

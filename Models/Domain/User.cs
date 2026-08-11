@@ -6,6 +6,7 @@ namespace BandLife.Models.Domain
     public class User
     {
         public int Id { get; set; }
+        public required string Name { get; set; }
         public required string Band { get; set; }
         [EmailAddress]
         public required string Email { get; set; }
@@ -16,10 +17,10 @@ namespace BandLife.Models.Domain
         public required int Events { get; set; }
         public required string Job { get; set; }
         public required int JobIncome { get; set; }
+        public DateTimeOffset? JobStart { get; set; }
         public required int BandIncome { get; set; }
         public required string Popularity { get; set; }
         public required int Listeners { get; set; }
         public required List<string> Releases { get; set; } = new List<string>();
-
     }
 }
