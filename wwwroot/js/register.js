@@ -1,54 +1,12 @@
-/******************************/
-/* REGISTRATION / LOGIN PAGE */
-/****************************/
+/**********************/
+/* REGISTRATION PAGE */
+/********************/
 
 // Imports
-import { getBandName, postUser } from "./api.js";
+import { postUser } from "./api.js";
 
 // Get Register form element
 const registerForm = document.getElementById("register");
-
-// Get Login modal and form elements
-// const loginForm = document.getElementById("login");
-const openLogin = document.querySelector(".login-text");
-
-//const closeLogin = document.getElementById("close-modal");
-const login = document.querySelector(".modal-login");
-const loginButton = document.getElementById("submit-login");
-
-/* Login open modal */
-openLogin.addEventListener("click", () => {
-  login.classList.add("open");
-});
-
-/* Login close modal */
-document.addEventListener('click', (event) => {
-  if (event.target === login) {
-    // If the click is directly on the dialog backdrop or outside the dialog
-    login.classList.remove('open');
-  }
-});
-
-/* Search login button */ 
-loginButton.addEventListener("click", async () => {
-    // Read band name from login modal
-    const bandName = document.getElementById("login-band").value;
-
-    try {
-        // API call with band name
-        const userData = await getBandName(bandName);
-
-        // Store User data to localStorage
-        localStorage.setItem("user", JSON.stringify(userData));
-
-        // Redirect to Home if successful
-        window.location.href = './pages/home.html';
-
-    } catch (error) {
-        console.error(error);
-        alert("Unable to find band.");
-    }
-});
 
 /* Get new User form data */
 function readNewUserForm() {

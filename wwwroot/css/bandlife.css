@@ -12,7 +12,7 @@
     --button-active-text: #edb943;
     --button-active-background: #121314;
     --a-text-hover: #edb943;
-    --focus: #4d21ff;
+    --focus: #cc3cc0;
     --table-hover: rgba(70, 70, 70, 0.75);
 }
 
@@ -32,24 +32,11 @@ html {
     grid-template-areas:
         "header"
         "nav"
+        "content-head"
         "content"
         "footer";
 }
 /*\/\/\/ MAIN LAYOUT SCHEMA \/\/\/*/
-
-/*/\/\/\ PROFILE LAYOUT SCHEMA /\/\/\*/
-/* Grid Properties */
-#profile-wrapper {
-    display: grid;
-    grid-template-columns: 2fr;
-    gap: 2rem;
-    grid-template-areas:
-        "header" "header"
-        "nav" "nav"
-        "profile-text" "profile-tabs"
-        "footer" "footer";
-}
-/*\/\/\/ PROFILE LAYOUT SCHEMA \/\/\/*/
 
 /* Grid Properties */
 /* Header */
@@ -63,6 +50,11 @@ html {
     align-items: center;
     color: var(--text);
     margin: -2rem auto;
+}
+
+#log-in:hover, #register-link:hover {
+    color: var(--text);
+    background-color: var(--focus);
 }
 
 #log-out:hover {
@@ -115,7 +107,7 @@ html {
     transition-duration: 0.5s;
 }
 
-.main-nav #log-out {
+.main-nav #log-in, #log-out, #register-link {
     position: fixed;
     width: 5rem;
     padding: 0.3rem;
@@ -155,6 +147,10 @@ h4 {
     margin: -.5rem auto;
 }
 
+#content-head {
+    grid-area: content-head;
+}
+
 .content {
     grid-area: content;
     display: flex;
@@ -179,16 +175,6 @@ h4 {
     flex-direction: row;
     gap: 2rem;
     align-items: flex-start;
-    /*
-    background-image: 
-        linear-gradient( to bottom, var(--background) 30%, transparent), 
-        url('../images/bg-02.jpg'), 
-        linear-gradient( to bottom, transparent 50%, var(--background) );
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    */
 }
 
 
@@ -197,12 +183,19 @@ h4 {
     grid-area: profile-text;
     display: flex;
     flex-direction: column;
+    padding: 0 1.5rem;
+    margin-left: 1.5rem;
+    background: var(--background);
+    opacity: 0.85;
+    border-radius: 5px;
+    border: 0.1rem solid var(--border);
 }
 
 #profile-tabs {
     grid-area: profile-tabs;
     display: flex;
     flex-direction: column;
+    margin-right: 1.5rem;
 }
 
 #profile-tabs div {
@@ -274,52 +267,18 @@ h4 {
     border: 0.1rem dotted var(--border);
 }
 
-/* Login */
-.modal-login {
-    display: none;
-    opacity: 0;
-}
-
-.modal-login.open {
-    display: flex;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 70%;
-    height: auto;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    background-color: var(--background);
-    opacity: 0.95;
-    border: 0.1rem solid var(--border);
-    border-radius: 20px;
-}
-
-.modal-content {
-    z-index: 1;
-}
-
-
 /* Form */
-.content-head, .login-content-subheader {
+.content-head {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
 }
 
-.login-content-subheader span {
-    color: var(--a-text-hover);
-    cursor: pointer;
-    transition-duration: 0.3s;
-}
-
 form {
     margin: 0 auto;
     padding: 0;
-    width: 60vw;
+    width: 30vw;
 }
 
 #choose-option div {
@@ -454,11 +413,22 @@ tbody tr:last-of-type td {
 
 /* Footer */
 .main-footer {
-    background-color: var(--background);
     grid-area: footer;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: var(--background);
+    bottom: 0;
+    width: 100%;
 }
 
 .main-footer a {
     color: var(--nav-contact);
     text-decoration: none;
+}
+
+.main-footer a:hover {
+    color: var(--focus);
+    transition-duration: 0.3s;
 }
