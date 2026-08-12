@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="BandLife Registration Page" />
-    <link rel="stylesheet" href="./css/bandlife.css" />
+    <link rel="stylesheet" href="../css/bandlife.css" />
     <title>BandLife Register</title>
 </head>
 
@@ -15,23 +15,14 @@
             <header id="main-head">
                 <p>BandLife</p>
             </header>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="../login.html" class="nav-link" id="log-in">Log In</a></li>
+                </ul>
+            </nav>
+            <h1 id="content-head">Register</h1>
+            <!-- Log In -->
             <article class="content">
-                <h1 class="content-head">Register</h1>
-                <h4>or</h4>
-                <h3 class="login-content-subheader"><span class="login-text">Log In</span></h3>
-                <!-- Log In -->
-                <div class="modal-login">
-                    <div class="modal-content">
-                        <p class="login-content-subheader">Log In</p>
-                        <form id="login">
-                            <label for="band">Band Name</label>
-                            <input type="text" id="login-band" spellcheck="false" />
-                            <button type="button" id="submit-login">Login</button>
-                            <button id="close-modal">Close</button>
-                        </form>
-                    </div>
-                </div>
-
                 <section>
                     <form id="register">
                         <fieldset>
@@ -76,5 +67,4 @@
 </body>
 
 </html>
-<script type="module" src="./js/register.js"></script>
-<script type="module" src="./js/shared.js"></script>
+<script type="module" src="../js/register.js"></script>
