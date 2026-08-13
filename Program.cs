@@ -1,14 +1,17 @@
 using BandLife.Data;
+using BandLife.Models.Domain;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers();
+
 builder.Services.AddDbContext<BandLifeDbContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
+options.UseSqlServer(
+    builder.Configuration.GetConnectionString("DefaultConnectionString")));
 
 // Add Swagger services
 builder.Services.AddEndpointsApiExplorer();
@@ -20,6 +23,26 @@ builder.Services.AddSwaggerGen(options =>
         Version = "v1"
     });
 });
+
+builder.Services.AddAuthorization();
+
+builder.Services.AddIdentityApiEndpoints<ApplicationUser>(options =>
+{
+    options.User.RequireUniqueEmail = true;
+
+    options.Password.RequiredLength = 8;
+    options.Password.RequireDigit = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireNonAlphanumeric = false;
+
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.DefaultLockoutTimeSpan
+    = TimeSpan.FromMinutes(5);
+})
+.AddEntityFrameworkStores<BandLifeDbContext>();
+
+builder.Services.AddControllers();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
@@ -42,8 +65,13 @@ app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Provide Identity's built-in account endpoints
+app.MapGroup("/api/account")
+    .MapIdentityApi<ApplicationUser>();
 
 app.Run();

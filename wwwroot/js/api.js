@@ -29,9 +29,15 @@ export async function getUser(userId) {
 }
 
 /* Get User data by Band Name */
-export async function getBandName(band) {
+export async function login(loginData) {
     try {
-        const response = await fetch(`/api/users/band/${band}`);
+        const response = await fetch("/api/account/login?useCookies=true", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(loginData)
+        });
 
         if (!response.ok) {
             throw new Error(`HTTP Error: ${response.status}`);
@@ -40,6 +46,7 @@ export async function getBandName(band) {
         const loadedUser = await response.json();
 
         return loadedUser;
+
     } catch (error) {
         console.error(error);
     }
@@ -88,7 +95,7 @@ export async function getEvents() {
 
 export async function postUser(newUserData) {
     try {
-        const response = await fetch("/api/users", {
+        const response = await fetch("/api/account/custom-register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

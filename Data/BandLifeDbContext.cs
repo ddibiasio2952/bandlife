@@ -1,15 +1,17 @@
 ﻿using BandLife.Models.Domain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace BandLife.Data
 {
-    public class BandLifeDbContext : DbContext
+    public class BandLifeDbContext : IdentityDbContext<ApplicationUser>
     {
-        public BandLifeDbContext(DbContextOptions<BandLifeDbContext> options) : base(options) 
+        public BandLifeDbContext(
+            DbContextOptions<BandLifeDbContext> options) 
+            : base(options) 
         { 
         }
         
-        public DbSet<User> Users { get; set; } = null!;
         public DbSet<Event> Events {  get; set; } = null!;
 
     }

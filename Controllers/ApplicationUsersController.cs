@@ -12,25 +12,26 @@ namespace BandLife.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class ApplicationUsersController : ControllerBase
     {
         private readonly BandLifeDbContext _context;
 
-        public UsersController(BandLifeDbContext context)
+        public ApplicationUsersController(BandLifeDbContext context)
         {
             _context = context;
         }
 
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetUsers()
         {
             return await _context.Users.ToListAsync();
         }
 
         // GET: api/Users/5
+        /*
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<ApplicationUser>> GetUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
 
@@ -41,10 +42,10 @@ namespace BandLife.Controllers
 
             return user;
         }
-
+        */
         // GET: api/Users/"name"
         [HttpGet("band/{band}")]
-        public async Task<ActionResult<User>> GetBand(string band)
+        public async Task<ActionResult<ApplicationUser>> GetBand(string band)
         {
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Band == band);
@@ -59,8 +60,9 @@ namespace BandLife.Controllers
 
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /*
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public async Task<IActionResult> PutUser(int id, ApplicationUser user)
         {
             if (id != user.Id)
             {
@@ -87,11 +89,12 @@ namespace BandLife.Controllers
 
             return NoContent();
         }
-
+        */
+        /*
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<ApplicationUser>> PostUser(ApplicationUser user)
         {
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -102,8 +105,9 @@ namespace BandLife.Controllers
                 new { id = @user.Id }, 
                 @user);
         }
-
+        */
         // DELETE: api/Users/5
+        /*
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
@@ -118,10 +122,12 @@ namespace BandLife.Controllers
 
             return NoContent();
         }
-
+        */
+        /*
         private bool UserExists(int id)
         {
             return _context.Users.Any(e => e.Id == id);
         }
+        */
     }
 }

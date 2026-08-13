@@ -1,0 +1,74 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using BandLife.Models.Domain;
+using BandLife.Models.DTOs;
+
+namespace BandLife.Controllers
+{
+    [ApiController]
+    [Route("api/account")]
+    public class AccountController : ControllerBase
+    {
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        public AccountController(
+            UserManager<ApplicationUser> userManager, 
+            SignInManager<ApplicationUser> signInManager)
+        {
+            _userManager = userManager;
+            _signInManager = signInManager;
+        }
+
+        [HttpPost("custom-register")]
+        public async Task<IActionResult> Register(RegisterUserRequest request)
+        {
+            string email = request.Email.Trim();
+            var user = new ApplicationUser
+            {
+                UserName = email,
+                Email = email,
+                Band = request.Band.Trim(),
+                Instrument = request.Instrument.Trim(),
+                Genres = request.Genres,
+
+                Status = [],
+                Members = 1,
+                Events = 0,
+                Job = "Jobless",
+                JobIncome = 0,
+                BandIncome = 0,
+                Popularity = "\"Who?\"",
+                Listeners = 0,
+                Releases = []
+            };
+
+            IdentityResult result = await _userManager.CreateAsync(user, request.Password);
+            
+            if (!result.Succeeded)
+            {
+                return BadRequest(new
+                {
+                    errors = result.Errors.Select(error => new
+                    {
+                        error.Code,
+                        error.Description
+                    })
+                });
+            }
+
+            // Create authentication cookie
+            await _signInManager.SignInAsync(user, isPersistent: false);
+
+            return Ok(new
+            {
+                user.Id,
+                user.UserName,
+                user.Email,
+                user.Band,
+                user.Instrument,
+                user.Genres
+            });
+        }
+    }
+
+}
