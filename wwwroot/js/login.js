@@ -3,29 +3,38 @@
 /*************/
 
 // Imports
-import { getBandName, postUser } from "./api.js";
+import { login } from "./api.js";
 
 
 // Get Login button element
-const loginButton = document.getElementById("submit-login");
+const loginForm = document.getElementById("login-form");
 
 /* Login button */
-loginButton.addEventListener("click", async () => {
-    // Read email and password from login
-    const loginData = {
+loginForm.addEventListener("submit", async event => {
+    event.preventDefault();
+
+    // Read Login request
+    const loginRequest = {
         email: document.getElementById("login-email").value,
-        password: document.getElementById("login-password").value
+        password: document.getElementById("login-password").value,
+        rememberMe: document.getElementById("remember-me").checked
     };
 
     try {
-        // API call with band name
-        const userData = await login(loginData);
+        // API call with user credentials
+        const userData = await login(loginRequest);
 
-        // Redirect to Home if successful
+        // Redirect to Profile if successful
+        console.log("Logged in:", userData);
         window.location.href = './pages/profile.html';
 
     } catch (error) {
         console.error(error);
-        alert("Unable to find band.");
+        const errorMessage = document.getElementById("login-error-message");
+
+        // Display error message if login fails 
+        if (errorMessage) {
+            errorMessage.textContent = error.message;
+        }
     }
 });

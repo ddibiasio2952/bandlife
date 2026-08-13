@@ -1,12 +1,12 @@
+/*******************/
+/* EVENT ADD PAGE */
+/*****************/
+
 import { postEvent } from "./api.js";
 
 const addEventForm = document.getElementById("add-event");
 
 // Added all below to event-modify.js
-
-/*******************/
-/* EVENT ADD PAGE */
-/*****************/
 
 /* Submit new Event Button */
 addEventForm.addEventListener("submit", async (event) => {

@@ -2,6 +2,8 @@
 /* SHARED RESOURCES */
 /*******************/
 
+import { logoutUser } from "./api.js";
+
 // Fetch HTML template
 const templateResponse = await fetch("../templates/template.html");
 
@@ -35,17 +37,20 @@ populateTemplate("main-nav", mainNavTemplate);
 populateTemplate("main-footer", mainFooterTemplate);
 
 /* Log Out Button Listener */
-if (document.querySelector(".main-nav")) {
+if (document.getElementById("main-nav")) {
     const logoutButton = document.getElementById("log-out");
 
     logoutButton.addEventListener("click", async () => {
-        localStorage.removeItem("user");
+        try {
+            await logoutUser();
 
-        // Check if removal was successful
-        if (localStorage.getItem("user") === null) {
-            console.log("Removed user data from localStorage");
-        } else {
-            console.error('Failed to  remove user data from localStorage');
+            console.log("Logout successful.");
+
+            window.location.href = ".pages/login.html";
         }
+        catch (error) {
+            console.error(error);
+        }
+
     });
 }

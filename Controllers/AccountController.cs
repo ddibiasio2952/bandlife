@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using BandLife.Models.Domain;
 using BandLife.Models.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BandLife.Controllers
 {
@@ -19,6 +20,7 @@ namespace BandLife.Controllers
             _signInManager = signInManager;
         }
 
+        // POST: /api/account/custom-register
         [HttpPost("custom-register")]
         public async Task<IActionResult> Register(RegisterUserRequest request)
         {
@@ -69,6 +71,47 @@ namespace BandLife.Controllers
                 user.Genres
             });
         }
-    }
 
+        //POST: /api/account/login
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginUserRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ValidationProblem(ModelState);
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(
+                userName: request.Email, 
+                password: request.Password, 
+                isPersistent: request.RememberMe, 
+                lockoutOnFailure: false
+                );
+
+            if (!result.Succeeded)
+            {
+                return Unauthorized(new
+                {
+                    message = "The email address or password is incorrect."
+                });
+            }
+
+            return Ok(new
+            {
+                message = "Login successful."
+            });
+        }
+
+        // POST: /api/account/logout
+        [Authorize]
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+
+            return Ok(new { message = "Logged out successfully." });
+        }
+
+
+    }
 }
