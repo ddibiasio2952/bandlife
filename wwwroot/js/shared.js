@@ -19,12 +19,13 @@ const template = parser.parseFromString(templateHtml, "text/html");
 const mainNavTemplate = template.getElementById("main-nav-template");
 const mainFooterTemplate = template.getElementById("main-footer-template");
 
-/* Populate Main Navbar */
+/* Populate Template Function */
 function populateTemplate(elementId, template) {
     const targetElement = document.getElementById(elementId);
 
     // Verify target element and template exist
     if (targetElement && template) {
+        // Append template content to target element
         targetElement.appendChild(template.content.cloneNode(true));
     } else {
         // Log warning if unsuccessful

@@ -3,44 +3,19 @@
 /***************/
 
 // Imports
-import { getProfile, requireLogin } from "./api.js";
-
-console.log("Current origin:", window.location.origin);
+import { initializeAuthorizedPage, Roles } from "./auth.js";
 
 /* Check if User is logged in with Profile API call */
+// API call
+const profileData = await initializeAuthorizedPage([
+    Roles.USER,
+    Roles.MODERATOR,
+    Roles.ADMIN
+]);
 
-/* Check if User is logged in */
-/*
-const currentUser = await requireLogin();
-
-if (currentUser) {
-    console.log("Loading user.");
-
-    // Load Profile
-    document.body.classList.remove("authentication-pending");
-    //await loadProfile();
-
-} else {
-// Redirect to login page
-    window.location.href = "../login.html";
-}
-
-*/
-try {
-    // API call
-    const profileData = await getProfile();
-
-    if (profileData) {
-        // Remove authentication pending class
-        document.body.classList.remove("authentication-pending");
-        // Populate page
-        loadProfile(profileData);
-    }
-} catch (error) {
-    console.error("Error loading profile:", error);
-
-    // Redirect to login page
-    window.location.href = "../login.html";
+if (profileData) {
+    // Populate page
+    loadProfile(profileData);
 }
 
 

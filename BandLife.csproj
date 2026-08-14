@@ -1,10 +1,20 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="ProtectedPages\event-add.html" />
+    <Content Include="ProtectedPages\event-go.html" />
+    <Content Include="ProtectedPages\event-list.html" />
+    <Content Include="ProtectedPages\event-modify.html" />
+    <Content Include="ProtectedPages\events.html" />
+    <Content Include="ProtectedPages\main-page.html" />
+    <Content Include="ProtectedPages\profile.html" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.11" />

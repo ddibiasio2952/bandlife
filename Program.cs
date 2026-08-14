@@ -40,7 +40,8 @@ builder.Services.AddIdentityApiEndpoints<ApplicationUser>(options =>
     options.Lockout.DefaultLockoutTimeSpan
     = TimeSpan.FromMinutes(5);
 })
-.AddEntityFrameworkStores<BandLifeDbContext>();
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<BandLifeDbContext>();
 
 builder.Services.AddControllers();
 
@@ -60,14 +61,12 @@ if (app.Environment.IsDevelopment())
 
 }
 
+await RoleSeeder.SeedRolesAsync(app.Services);
 app.UseHttpsRedirection();
-
-// Serve files from the wwwroot folder
 app.UseStaticFiles();
-
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
+app.MapIdentityApi<ApplicationUser>();
 
 app.Run();

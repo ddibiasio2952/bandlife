@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using BandLife.Models.Domain;
 using BandLife.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
+using BandLife.Authorization;
 
 namespace BandLife.Controllers
 {
@@ -21,11 +22,27 @@ namespace BandLife.Controllers
             _signInManager = signInManager;
         }
 
-        // POST: /api/account/custom-register
+        // POST: /api/account/register
         [AllowAnonymous]
-        [HttpPost("custom-register")]
+        [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterUserRequest request)
         {
+            // Reject manual role insertion
+            string? role = request.AccountType switch
+            {
+                AppRoles.User => AppRoles.User,
+                AppRoles.Moderator => AppRoles.Moderator,
+                _ => null
+            };
+
+            if (role is null)
+            {
+                return BadRequest(new
+                {
+                    message = "Invalid account type."
+                });
+            }
+
             string email = request.Email.Trim();
             var user = new ApplicationUser
             {
@@ -61,6 +78,20 @@ namespace BandLife.Controllers
                 });
             }
 
+            IdentityResult roleResult = await _userManager.AddToRoleAsync(user, role);
+
+            if (!roleResult.Succeeded)
+            {
+                await _userManager.DeleteAsync(user); // Rollback user creation if role assignment fails
+
+                return StatusCode(500,new
+                {
+                    message = "The account role could not be assigned.",
+                    errors = roleResult.Errors.Select(error =>
+                        error.Description)
+                });
+            }
+
             // Create authentication cookie
             await _signInManager.SignInAsync(user, isPersistent: false);
 
@@ -71,7 +102,8 @@ namespace BandLife.Controllers
                 user.Email,
                 user.Band,
                 user.Instrument,
-                user.Genres
+                user.Genres,
+                accountType = role
             });
         }
 
@@ -114,12 +146,45 @@ namespace BandLife.Controllers
 
         // GET: /api/account/status
         [HttpGet("status")]
-        public IActionResult GetAuthenticationStatus()
+        public async Task<IActionResult> GetStatus()
         {
+            ApplicationUser? user = await _userManager.GetUserAsync(User);
+
+            if (user is null)
+            {
+                return Unauthorized();
+            }
+
+            IList<string> roles = await _userManager.GetRolesAsync(user);
+
             return Ok(new
             {
-                isAuthenticated = User.Identity?.IsAuthenticated ?? false,
-                userName = User.Identity?.Name
+                isAuthenticated = true,
+                userId = user.Id,
+                email = user.Email,
+                roles
+            });
+        }
+
+        [Authorize]
+        [HttpGet("me")]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            ApplicationUser? user = await _userManager.GetUserAsync(User);
+
+            if (user is null)
+            {
+                return Unauthorized();
+            }
+
+            IList<string> roles = await _userManager.GetRolesAsync(user);
+
+            return Ok(new
+            {
+                id = user.Id,
+                name = user.Name,
+                email = user.Email,
+                roles
             });
         }
 

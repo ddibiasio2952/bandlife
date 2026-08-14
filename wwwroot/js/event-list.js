@@ -3,7 +3,8 @@
 /*****************************/
 
 // Imports
-import { requireLogin, getUser, getEvents } from "./api.js";
+import { requireLogin, requireRole } from "./auth.js";
+import { getUser, getEvents } from "./api.js";
 
 // Get current User data with User Id from localStorage
 const storedLogin = JSON.parse(localStorage.getItem("user"));
@@ -24,7 +25,7 @@ function eventChooser(loadedEvents, userData) {
     console.log("Events: ", loadedEvents.length);
 
     // Conditional Processing for Event Queue
-    if (window.location.pathname === "/pages/event-list.html") {
+    if (window.location.pathname === "/ProtectedPages/event-list") {
         /* Load all events if Admin List Page */
         eventQueue = loadedEvents;
 
@@ -64,17 +65,17 @@ function populateEventTable(eventQueue) {
         const button = document.createElement("button");
 
         /* Determine if Modify Page or User Page */
-        if (window.location.pathname === "/pages/event-list.html") {
+        if (window.location.pathname === "/ProtectedPages/event-list") {
             // Create button to modify Event
             button.textContent = "Modify";
             button.addEventListener("click", () => {
-                window.location.href = `event-modify.html?id=${event.id}`;
+                window.location.href = `/ProtectedPages/event-modify?id=${event.id}`;
             });
         } else {
             // Create button to play Event
             button.textContent = "Go!";
             button.addEventListener("click", () => {
-                window.location.href = `event-go.html?id=${event.id}`;
+                window.location.href = `/ProtectedPages/event-go?id=${event.id}`;
             });
         }
 

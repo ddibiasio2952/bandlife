@@ -28,9 +28,7 @@ namespace BandLife.Controllers
 
         // GET: /api/applicationusers/profile
         [HttpGet("profile")]
-        public async Task<ActionResult<ApplicationUserProfileResponse>>
-            GetProfile()
-        {
+        public async Task<ActionResult<ApplicationUserProfileResponse>> GetProfile() {
             // Endpoint obtains the User from the Identity cookie
             var user = await _userManager.GetUserAsync(User);
 

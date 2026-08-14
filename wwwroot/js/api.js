@@ -6,60 +6,8 @@
 /* GET APIS */
 /***********/
 
-/* Get Authenticated User data */
-export async function requireLogin() {
-    const response = await fetch("/api/account/status", {
-        method: "GET",
-        credentials: "include"
-    });
-
-    if (response.status === 401) {
-        return null;
-    }
-
-    if (!response.ok) {
-        throw new Error(
-            `Unable to verify login. Status: ${response.status}`
-        );
-    }
-
-    return await response.json();
-}
-
-/* Get Authenticated User Profile data */
-export async function getProfile() {
-    const response = await fetch("/api/applicationusers/profile", {
-        credentials: "include"
-    });
-
-    if (response.status === 401) {
-        return null;
-    }
-
-    if (!response.ok) {
-        throw new Error(
-            `Failed to load profile. Status: ${response.status}`
-        );
-    }
-
-    return await response.json();
-}
-
 /* Get User data by Id */ 
 export async function getUser(userId) {
-/*
-    const response = await fetch(`/api/users/${userId}`)
-    if (!response.ok) {
-        throw new Error(`HTTP Error: ${response.status}`);
-    }
-    // Retrieve user data
-    const userData = await response.json();
-
-    // Update localStorage
-    localStorage.removeItem("user");
-    localStorage.setItem("user", JSON.stringify(userData));
-    return userData;
-*/
 }
 
 
@@ -124,7 +72,7 @@ export async function getEvents() {
 
 /* Post new User */
 export async function postUser(newUserData) {
-    const response = await fetch("/api/account/custom-register", {
+    const response = await fetch("/api/account/register", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

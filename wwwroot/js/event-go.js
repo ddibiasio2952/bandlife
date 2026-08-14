@@ -3,7 +3,8 @@
 /******************/
 
 // Imports
-import { requireLogin, loadEventAction, loadUser } from "./api.js";
+import { requireLogin, requireRole } from "./auth.js";
+import { loadEventAction, loadUser } from "./api.js";
 
 /* Check if User is logged in */
 requireLogin();

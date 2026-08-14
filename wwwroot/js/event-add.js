@@ -3,7 +3,9 @@
 /*****************/
 
 // Imports
-import { requireLogin, postEvent } from "./api.js";
+import { requireLogin, requireRole } from "./auth.js";
+import { postEvent } from "./api.js";
+
 
 /* Check if User is logged in */
 const currentUser = await requireLogin();
@@ -40,7 +42,7 @@ addEventForm.addEventListener("submit", async (event) => {
         alert("Event creation successful!");
 
         // Redirect to Event List if successful
-        window.location.href = './event-list.html';
+        window.location.href = "./event-list";
 
     } catch (error) {
         console.error(error);

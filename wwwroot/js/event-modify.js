@@ -3,7 +3,8 @@
 /********************/
 
 // Imports
-import { requireLogin, getEvent, modifyEvent } from "./api.js";
+import { requireLogin, requireRole } from "./auth.js";
+import { getEvent, modifyEvent } from "./api.js";
 
 /* Check if User is logged in */
 const currentUser = await requireLogin();
