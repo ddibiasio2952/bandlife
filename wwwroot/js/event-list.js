@@ -3,7 +3,7 @@
 /*****************************/
 
 // Imports
-import { getUser, getEvents } from "./api.js";
+import { requireLogin, getUser, getEvents } from "./api.js";
 
 // Get current User data with User Id from localStorage
 const storedLogin = JSON.parse(localStorage.getItem("user"));

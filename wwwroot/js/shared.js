@@ -46,7 +46,8 @@ if (document.getElementById("main-nav")) {
 
             console.log("Logout successful.");
 
-            window.location.href = ".pages/login.html";
+            // Redirect to login page
+            window.location.href = "../login.html";
         }
         catch (error) {
             console.error(error);

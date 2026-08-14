@@ -2,28 +2,18 @@
 /* EVENT PLAY PAGE */
 /******************/
 
+// Imports
+import { requireLogin, loadEventAction, loadUser } from "./api.js";
+
+/* Check if User is logged in */
+requireLogin();
+
+/* Load User's Events */
+loadEventAction(eventId);
+
 // Get Event Id from URL 
 const params = new URLSearchParams(window.location.search);
 const eventId = params.get("id");
-const login = JSON.parse(localStorage.getItem("user"));
-
-/* Load Event by Id */ // API
-async function loadEventAction(eventId) {
-    try {
-        const response = await fetch(`/api/events/${eventId}`);
-
-        if (!response.ok) {
-            throw new Error(`HTTP Error: ${response.status}`);
-        }
-
-        const loadedEvent = await response.json();
-
-        renderOptions(loadedEvent);
-        
-    } catch (error) {
-        console.error(error);
-    }
-}
 
 /* Populate Option Form */
 function renderOptions(loadedEvent) {
@@ -71,33 +61,6 @@ async function applyOutcome(option) {
     console.log(userJson);
 }
 
-/* Load User Data */ // API
-async function loadUser(userId) {
-    try {
-        const response = await fetch(`/api/users/${userId}`)
-
-        if (!response.ok) {
-            throw new Error(`HTTP Error: ${response.status}`);
-        }
-        // Retrieve user data
-        const userJson = await response.json();
-
-        // Update localStorage
-        localStorage.removeItem("user");
-        localStorage.setItem("user", JSON.stringify(userJson));
-
-        
-        // Load Event list if on Event List page
-        if (window.location.pathname === "/pages/event-list.html") {
-            loadEvents(userJson);
-        } else {
-            return userJson;
-        }
-    } catch (error) {
-        console.error(error);
-    }
-}
-
 /* Modified Data */
 function getModifyData() {
     return {
@@ -112,23 +75,3 @@ function getModifyData() {
             .filter(value => value !== ""),
     };
 }
-
-/* Submit Modified Event */
-async function Event(eventData) {
-    const response = await fetch(`/api/events/${eventId}`, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(eventData)
-    });
-
-    if (!response.ok) {
-        throw new Error(`Update failed: ${response.status}`);
-    }   
-}
-
-/* Page Load */
-document.addEventListener("DOMContentLoaded", () => {
-    loadEventAction(eventId);
-});

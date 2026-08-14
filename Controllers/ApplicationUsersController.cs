@@ -1,133 +1,65 @@
-﻿using System;
+﻿using BandLife.Data;
+using BandLife.Models.Domain;
+using BandLife.Models.DTOs;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using BandLife.Data;
-using BandLife.Models.Domain;
 
 namespace BandLife.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ApplicationUsersController : ControllerBase
     {
-        private readonly BandLifeDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ApplicationUsersController(BandLifeDbContext context)
+        public ApplicationUsersController(
+            UserManager<ApplicationUser> userManager)
         {
-            _context = context;
+            _userManager = userManager;
         }
 
-        // GET: api/Users
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetUsers()
+        // GET: /api/applicationusers/profile
+        [HttpGet("profile")]
+        public async Task<ActionResult<ApplicationUserProfileResponse>>
+            GetProfile()
         {
-            return await _context.Users.ToListAsync();
-        }
+            // Endpoint obtains the User from the Identity cookie
+            var user = await _userManager.GetUserAsync(User);
 
-        // GET: api/Users/5
-        /*
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ApplicationUser>> GetUser(int id)
-        {
-            var user = await _context.Users.FindAsync(id);
-
-            if (user == null)
+            if (user is null)
             {
-                return NotFound();
+                return Unauthorized();
             }
 
-            return user;
-        }
-        */
-        // GET: api/Users/"name"
-        [HttpGet("band/{band}")]
-        public async Task<ActionResult<ApplicationUser>> GetBand(string band)
-        {
-            var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Band == band);
-
-            if (user == null)
+            var response = new ApplicationUserProfileResponse
             {
-                return NotFound();
-            }
+                Id = user.Id,
+                Email = user.Email ?? string.Empty,
+                Name = user.Name,
+                Band = user.Band,
+                Instrument = user.Instrument,
+                Genres = user.Genres?.ToList() ?? [],
+                Status = user.Status?.ToList() ?? [],
+                Members = user.Members,
+                Events = user.Events,
+                Job = user.Job,
+                JobIncome = user.JobIncome,
+                JobStart = user.JobStart,
+                BandIncome = user.BandIncome,
+                Popularity = user.Popularity,
+                Listeners = user.Listeners,
+                Releases = user.Releases
+            };
 
-            return user;
+            return Ok(response);
         }
-
-        // PUT: api/Users/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        /*
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, ApplicationUser user)
-        {
-            if (id != user.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(user).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-        */
-        /*
-        // POST: api/Users
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<ApplicationUser>> PostUser(ApplicationUser user)
-        {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-
-            // return CreatedAtAction("GetUser", new { id = user.Id }, user);
-            return CreatedAtAction(
-                nameof(GetUser), 
-                new { id = @user.Id }, 
-                @user);
-        }
-        */
-        // DELETE: api/Users/5
-        /*
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
-        {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-        */
-        /*
-        private bool UserExists(int id)
-        {
-            return _context.Users.Any(e => e.Id == id);
-        }
-        */
     }
 }

@@ -6,6 +6,45 @@
 /* GET APIS */
 /***********/
 
+/* Get Authenticated User data */
+export async function requireLogin() {
+    const response = await fetch("/api/account/status", {
+        method: "GET",
+        credentials: "include"
+    });
+
+    if (response.status === 401) {
+        return null;
+    }
+
+    if (!response.ok) {
+        throw new Error(
+            `Unable to verify login. Status: ${response.status}`
+        );
+    }
+
+    return await response.json();
+}
+
+/* Get Authenticated User Profile data */
+export async function getProfile() {
+    const response = await fetch("/api/applicationusers/profile", {
+        credentials: "include"
+    });
+
+    if (response.status === 401) {
+        return null;
+    }
+
+    if (!response.ok) {
+        throw new Error(
+            `Failed to load profile. Status: ${response.status}`
+        );
+    }
+
+    return await response.json();
+}
+
 /* Get User data by Id */ 
 export async function getUser(userId) {
 /*
@@ -23,6 +62,7 @@ export async function getUser(userId) {
 */
 }
 
+
 /* Get Event by Id */
 export async function getEvent(eventId) {
     const response = await fetch(`/api/events/${eventId}`);
@@ -31,6 +71,41 @@ export async function getEvent(eventId) {
     }
 
     return await response.json();
+}
+
+/* Load Event by Id */ //Redundant to getEvent? getEvent doesn't have renderOptions
+export async function loadEventAction(eventId) {
+    const response = await fetch(`/api/events/${eventId}`);
+    if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
+    }
+
+    if (!response.ok) {
+        throw new Error(`Get event failed: ${response.status}`);
+    }
+
+    const loadedEvent = await response.json();
+
+    renderOptions(loadedEvent);
+}
+
+/* Load User Data */ // API
+export async function loadUser(userId) {
+    /*
+    const response = await fetch(`/api/users/${userId}`)
+    if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
+    }
+    // Retrieve user data
+    const userJson = await response.json();
+
+    // Load Event list if on Event List page
+    if (window.location.pathname === "/pages/event-list.html") {
+        loadEvents(userJson);
+    } else {
+        return userJson;
+    }
+    */
 }
 
 /* Get User's Events */ 
@@ -134,6 +209,21 @@ export async function modifyEvent(eventData, eventId) {
     }
 
     await response.json();
+}
+
+/* Submit Modified Event */ // REVISE
+export async function submitEvent(eventData) {
+    const response = await fetch(`/api/events/${eventId}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(eventData)
+    });
+
+    if (!response.ok) {
+        throw new Error(`Update failed: ${response.status}`);
+    }
 }
 
 /****************/

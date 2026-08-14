@@ -6,8 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BandLife.Controllers
 {
+    [Authorize]
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("api/account")]
     public class AccountController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -21,6 +22,7 @@ namespace BandLife.Controllers
         }
 
         // POST: /api/account/custom-register
+        [AllowAnonymous]
         [HttpPost("custom-register")]
         public async Task<IActionResult> Register(RegisterUserRequest request)
         {
@@ -29,6 +31,7 @@ namespace BandLife.Controllers
             {
                 UserName = email,
                 Email = email,
+                Name = request.Name.Trim(),
                 Band = request.Band.Trim(),
                 Instrument = request.Instrument.Trim(),
                 Genres = request.Genres,
@@ -73,20 +76,18 @@ namespace BandLife.Controllers
         }
 
         //POST: /api/account/login
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginUserRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return ValidationProblem(ModelState);
-            }
+            string email = request.Email.Trim();
 
             var result = await _signInManager.PasswordSignInAsync(
-                userName: request.Email, 
-                password: request.Password, 
-                isPersistent: request.RememberMe, 
+                userName: email,
+                password: request.Password,
+                isPersistent: request.RememberMe,
                 lockoutOnFailure: false
-                );
+            );
 
             if (!result.Succeeded)
             {
@@ -103,7 +104,6 @@ namespace BandLife.Controllers
         }
 
         // POST: /api/account/logout
-        [Authorize]
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
@@ -112,6 +112,36 @@ namespace BandLife.Controllers
             return Ok(new { message = "Logged out successfully." });
         }
 
+        // GET: /api/account/status
+        [HttpGet("status")]
+        public IActionResult GetAuthenticationStatus()
+        {
+            return Ok(new
+            {
+                isAuthenticated = User.Identity?.IsAuthenticated ?? false,
+                userName = User.Identity?.Name
+            });
+        }
 
+        // Diagnostic Endpoint
+        [AllowAnonymous]
+        [HttpGet("debug-auth")]
+        public IActionResult DebugAuthentication()
+        {
+            return Ok(new
+            {
+                isAuthenticated =
+                    User.Identity?.IsAuthenticated ?? false,
+
+                authenticationType =
+                    User.Identity?.AuthenticationType,
+
+                userName =
+                    User.Identity?.Name,
+
+                claimCount =
+                    User.Claims.Count()
+            });
+        }
     }
 }

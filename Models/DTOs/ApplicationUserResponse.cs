@@ -1,17 +1,15 @@
-﻿using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
-using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Identity;
-
-namespace BandLife.Models.Domain
+﻿namespace BandLife.Models.DTOs
 {
-    public class ApplicationUser : IdentityUser
+    public class ApplicationUserProfileResponse
     {
+        public string Id { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public string Band { get; set; } = string.Empty;
         public string Instrument { get; set; } = string.Empty;
         public List<string> Genres { get; set; } = [];
         public List<string> Status { get; set; } = [];
-        public int Members { get; set; } = 1;
+        public int Members { get; set; }
         public int Events { get; set; }
         public string Job { get; set; } = string.Empty;
         public int JobIncome { get; set; }

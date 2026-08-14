@@ -3,38 +3,58 @@
 /***************/
 
 // Imports
-import { getUser } from "./api.js";
+import { getProfile, requireLogin } from "./api.js";
 
+console.log("Current origin:", window.location.origin);
+
+/* Check if User is logged in with Profile API call */
+
+/* Check if User is logged in */
 /*
-const registerForm = document.getElementById("register");
-const loginForm = document.getElementById("login");
-const openLogin = document.querySelector(".login-text");
-const closeLogin = document.getElementById("close-modal");
-const login = document.querySelector(".modal-login");
-const loginButton = document.getElementById("submit-login");
+const currentUser = await requireLogin();
+
+if (currentUser) {
+    console.log("Loading user.");
+
+    // Load Profile
+    document.body.classList.remove("authentication-pending");
+    //await loadProfile();
+
+} else {
+// Redirect to login page
+    window.location.href = "../login.html";
+}
+
 */
+try {
+    // API call
+    const profileData = await getProfile();
 
-// Get current User data with User Id from localStorage
-const storedLogin = JSON.parse(localStorage.getItem("user"));
-const userData = await getUser(storedLogin.id);
+    if (profileData) {
+        // Remove authentication pending class
+        document.body.classList.remove("authentication-pending");
+        // Populate page
+        loadProfile(profileData);
+    }
+} catch (error) {
+    console.error("Error loading profile:", error);
 
-// Load User profile
-loadProfile(userData);
+    // Redirect to login page
+    window.location.href = "../login.html";
+}
+
 
 /* Load profile */
 function loadProfile(userData) {
-    /*
-    document.getElementById("band-status").textContent = userData.status;
-    populateArray(".status", loadedEvent.status);
-    */
+    // const userData = await 
     document.getElementById("band").textContent = userData.band;
     
     document.getElementById("genre").textContent = userData.genres[0];
     document.getElementById("members").textContent = userData.members;
 
     userData.releases.length === 0 ?
-        document.getElementById("releases").textContent = 0 :
-        document.getElementById("releases").textContent = userData.releases;
+    document.getElementById("releases").textContent = 0 :
+    document.getElementById("releases").textContent = userData.releases;
     
     document.getElementById("job").textContent = userData.job;
     document.getElementById("job-income").textContent = userData.jobIncome;
@@ -43,19 +63,3 @@ function loadProfile(userData) {
     document.getElementById("listeners").textContent = userData.listeners;
     document.getElementById("popularity").textContent = userData.popularity;
 }
-
-/*
-const band = document.getElementById("band");
-const bandStatus = document.getElementById("band-status");
-
-const genre = document.getElementById("genre");
-const members = document.getElementById("members");
-const releases = document.getElementById("releases");
-
-const job = document.getElementById("job");
-const jobIncome = document.getElementById("job-income");
-
-const bandIncome = document.getElementById("band-income");
-const listeners = document.getElementById("listeners");
-const popularity = document.getElementById("popularity");
-*/

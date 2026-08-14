@@ -28,7 +28,7 @@ namespace BandLife.Controllers
             return await _context.Events.ToListAsync();
         }
 
-        // GET: api/Events/5
+        // GET: api/Events/#
         [HttpGet("{id}")]
         public async Task<ActionResult<Event>> GetEvent(int id)
         {
@@ -42,7 +42,7 @@ namespace BandLife.Controllers
             return @event;
         }
 
-        // PUT: api/Events/5
+        // PUT: api/Events/#
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutEvent(int id, Event @event)
@@ -74,18 +74,16 @@ namespace BandLife.Controllers
         }
 
         // POST: api/Events
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Event>> PostEvent(Event @event)
         {
             _context.Events.Add(@event);
             await _context.SaveChangesAsync();
 
-            // return CreatedAtAction("GetEvent", new { id = @event.Id }, @event);
             return CreatedAtAction(nameof(GetEvent), new { id = @event.Id }, @event);
         }
 
-        // DELETE: api/Events/5
+        // DELETE: api/Events/#
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEvent(int id)
         {

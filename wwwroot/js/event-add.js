@@ -2,8 +2,25 @@
 /* EVENT ADD PAGE */
 /*****************/
 
-import { postEvent } from "./api.js";
+// Imports
+import { requireLogin, postEvent } from "./api.js";
 
+/* Check if User is logged in */
+const currentUser = await requireLogin();
+
+if (currentUser) {
+    console.log("Loading user.");
+
+    // Load Profile
+    document.body.classList.remove("authentication-pending");
+    //await loadProfile();
+
+} else {
+// Redirect to login page
+    window.location.href = "../login.html";
+}
+
+// Get Add Event form element
 const addEventForm = document.getElementById("add-event");
 
 // Added all below to event-modify.js

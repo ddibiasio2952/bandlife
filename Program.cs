@@ -60,18 +60,14 @@ if (app.Environment.IsDevelopment())
 
 }
 
-// Serve files from the wwwroot folder
-app.UseStaticFiles(); 
-
 app.UseHttpsRedirection();
+
+// Serve files from the wwwroot folder
+app.UseStaticFiles();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
-// Provide Identity's built-in account endpoints
-app.MapGroup("/api/account")
-    .MapIdentityApi<ApplicationUser>();
 
 app.Run();
