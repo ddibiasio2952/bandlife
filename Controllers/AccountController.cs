@@ -27,25 +27,10 @@ namespace BandLife.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterUserRequest request)
         {
-            // Reject manual role insertion
-            string? role = request.AccountType switch
-            {
-                AppRoles.User => AppRoles.User,
-                AppRoles.Moderator => AppRoles.Moderator,
-                _ => null
-            };
-
-            if (role is null)
-            {
-                return BadRequest(new
-                {
-                    message = "Invalid account type."
-                });
-            }
-
             string email = request.Email.Trim();
             var user = new ApplicationUser
             {
+                // Assignment from front end
                 UserName = email,
                 Email = email,
                 Name = request.Name.Trim(),
@@ -53,6 +38,7 @@ namespace BandLife.Controllers
                 Instrument = request.Instrument.Trim(),
                 Genres = request.Genres,
 
+                // Assignment from back end
                 Status = [],
                 Members = 1,
                 Events = 0,
@@ -78,11 +64,12 @@ namespace BandLife.Controllers
                 });
             }
 
-            IdentityResult roleResult = await _userManager.AddToRoleAsync(user, role);
+            IdentityResult roleResult = await _userManager.AddToRoleAsync(user, AppRoles.User);
 
             if (!roleResult.Succeeded)
             {
-                await _userManager.DeleteAsync(user); // Rollback user creation if role assignment fails
+                // Rollback user creation if role assignment fails
+                await _userManager.DeleteAsync(user); 
 
                 return StatusCode(500,new
                 {
@@ -103,7 +90,7 @@ namespace BandLife.Controllers
                 user.Band,
                 user.Instrument,
                 user.Genres,
-                accountType = role
+                role = AppRoles.User
             });
         }
 

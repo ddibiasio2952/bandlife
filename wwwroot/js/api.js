@@ -77,6 +77,7 @@ export async function postUser(newUserData) {
         headers: {
             "Content-Type": "application/json"
         },
+        credentials: "include",
         body: JSON.stringify(newUserData)
     });
 
@@ -89,7 +90,7 @@ export async function postUser(newUserData) {
 
 /* Post login User data */
 export async function login(loginData) {
-    const response = await fetch("/api/account/login", {
+    const response = await fetch("/api/account/login?useCookies=true", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

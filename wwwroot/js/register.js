@@ -14,7 +14,6 @@ function readNewUserForm() {
     return {
         email: document.getElementById("email").value,
         password: document.getElementById("password").value,
-
         name: document.getElementById("name").value,
         band: document.getElementById("band").value,
         instrument: document.getElementById("instrument").value,
@@ -46,7 +45,7 @@ registerForm.addEventListener("submit", async (event) => {
         console.log(createdUser);
 
         // Redirect to Profile if successful
-        window.location.href = './profile.html';
+        window.location.href = '/pages/profile';
 
     }
     catch (error) {

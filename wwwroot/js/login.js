@@ -36,7 +36,7 @@ loginForm.addEventListener("submit", async event => {
         console.log(await response.json());
         console.log("Diagnostic Endpoint End");
         console.log("Redirecting to profile page...");
-        window.location.href = './pages/profile.html';
+        window.location.href = "/pages/profile";
 
     } catch (error) {
         console.error(error);

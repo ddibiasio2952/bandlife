@@ -12,28 +12,24 @@ public static class RoleSeeder
         RoleManager<IdentityRole> roleManager =
             scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-        string[] roles =
-        [
-            AppRoles.User,
-            AppRoles.Moderator,
-            AppRoles.Admin
-        ];
-
-        foreach (string role in roles)
+        foreach (string roleName in AppRoles.All)
         {
-            if (!await roleManager.RoleExistsAsync(role))
+            if (await roleManager.RoleExistsAsync(roleName))
             {
-                IdentityResult result = await roleManager.CreateAsync(new IdentityRole(role));
+                continue;
+            }
 
-                if (!result.Succeeded)
-                {
-                    string errors = string.Join(
-                        ", ",
-                        result.Errors.Select(error => error.Description));
+            IdentityResult result = await roleManager.CreateAsync(new IdentityRole(roleName));
 
-                    throw new InvalidOperationException(
-                        $"Could not create role '{role}': {errors}");
-                }
+            if (!result.Succeeded)
+            {
+                string errors = string.Join(
+                    ", ",
+                    result.Errors.Select(error => error.Description));
+
+                throw new InvalidOperationException(
+                    $"Could not create role '{roleName}': " +
+                    errors);
             }
         }
     }

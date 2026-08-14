@@ -1,3 +1,4 @@
+using BandLife.Authorization;
 using BandLife.Data;
 using BandLife.Models.Domain;
 using Microsoft.AspNetCore.Identity;
@@ -58,6 +59,9 @@ if (app.Environment.IsDevelopment())
     // Swagger
     app.UseSwagger(); // Serves the Swagger JSON file
     app.UseSwaggerUI(); // Serves the interactive Swagger UI
+
+    // Assign admin role to the first registered user
+    //await DevelopmentUserSeeder.AssignAdminRoleAsync(app.Services, "mail@mail.com");
 
 }
 

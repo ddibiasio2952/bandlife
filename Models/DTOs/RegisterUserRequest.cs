@@ -10,8 +10,6 @@ namespace BandLife.Models.DTOs
         [Required]
         public required string Password { get; set; }
         [Required]
-        public string AccountType { get; set; } = string.Empty;
-        [Required]
         public required string Band { get; set; } = string.Empty;
         [Required]
         public required string Name { get; set; }
