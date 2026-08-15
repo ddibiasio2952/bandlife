@@ -1,11 +1,11 @@
-﻿namespace BandLife.Models.Domain
+﻿namespace BandLife.Models.DTOs.Events
 {
-    public class Event
+    public class CreateEventRequest
     {
-        public int Id { get; set; }
         public required string Name { get; set; }
         public required string Category { get; set; }
         public required string Description { get; set; }
-        public List<EventOption> Options { get; set; } = [];
+
+        public List<CreateEventOptionRequest> Options { get; set; } = [];
     }
 }

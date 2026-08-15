@@ -6,14 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BandLife.Migrations
 {
     /// <inheritdoc />
-    public partial class AddIdentity : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Users");
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -47,8 +44,6 @@ namespace BandLife.Migrations
                     Popularity = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Listeners = table.Column<int>(type: "int", nullable: false),
                     Releases = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EventAcceptedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    AcceptedEventId = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -67,6 +62,21 @@ namespace BandLife.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Events",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Events", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -175,6 +185,33 @@ namespace BandLife.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "EventOptions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Outcome = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MembersModifier = table.Column<int>(type: "int", nullable: false),
+                    NewJob = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    JobIncomeModifier = table.Column<int>(type: "int", nullable: false),
+                    BandIncomeModifier = table.Column<int>(type: "int", nullable: false),
+                    NewPopularityLevel = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ListenersModifier = table.Column<int>(type: "int", nullable: false),
+                    EventId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EventOptions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EventOptions_Events_EventId",
+                        column: x => x.EventId,
+                        principalTable: "Events",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -213,6 +250,11 @@ namespace BandLife.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EventOptions_EventId",
+                table: "EventOptions",
+                column: "EventId");
         }
 
         /// <inheritdoc />
@@ -234,37 +276,16 @@ namespace BandLife.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "EventOptions");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Band = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BandIncome = table.Column<int>(type: "int", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Events = table.Column<int>(type: "int", nullable: false),
-                    Genres = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Instrument = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Job = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    JobIncome = table.Column<int>(type: "int", nullable: false),
-                    JobStart = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    Listeners = table.Column<int>(type: "int", nullable: false),
-                    Members = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Popularity = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Releases = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
-                });
+            migrationBuilder.DropTable(
+                name: "Events");
         }
     }
 }
