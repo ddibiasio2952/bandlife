@@ -3,7 +3,7 @@
 /*****************************/
 
 // Imports
-import { getUser, getEvents } from "./api.js";
+import { getEvents } from "./api.js";
 import { initializeAuthorizedPage, Roles } from "./auth.js";
 
 /* Check if User is logged in with Profile API call */
@@ -55,7 +55,7 @@ function populateEventTable(eventQueue) {
 
         button.textContent = "Modify";
         button.addEventListener("click", () => {
-            window.location.href = `/ProtectedPages/event-modify?id=${event.id}`;
+            window.location.href = `/pages/event-modify?id=${event.id}`;
         });
 
         // Update row elements

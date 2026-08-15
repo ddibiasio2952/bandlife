@@ -4,7 +4,7 @@
 
 // Imports
 import { initializeAuthorizedPage, Roles } from "./auth.js";
-import { loadEventAction, loadUser } from "./api.js";
+import { loadEventAction, applyOutcome } from "./api.js";
 
 /* Check if User is logged in with Profile API call */
 // API call
@@ -14,12 +14,17 @@ const profileData = await initializeAuthorizedPage([
     Roles.ADMIN
 ]);
 
-/* Load User's Events */
-loadEventAction(eventId);
-
-// Get Event Id from URL 
+// Get Event Id from URL
 const params = new URLSearchParams(window.location.search);
 const eventId = params.get("id");
+
+/* Load User's Events */
+const loadedEvent = await loadEventAction(eventId);
+console.log("Loaded Event", loadedEvent);
+
+if (loadedEvent) {
+    renderOptions(loadedEvent);
+}
 
 /* Populate Option Form */
 function renderOptions(loadedEvent) {
@@ -42,29 +47,27 @@ function renderOptions(loadedEvent) {
         button.textContent = "Go";
 
         // Add Event Listener to Option Button
-        button.addEventListener("click", () => {
+        button.addEventListener("click", async () => {
             // Apply Outcome to User Data
-            console.log(loadedEvent.outcomes[index]),
-            applyOutcome(loadedEvent.outcomes[index])
+            console.log("loadedEvent.id: ", loadedEvent.id, " option.id: ", option.id);
+            try {
+                const postedOption = await applyOutcome(loadedEvent.id, option.id);
+                console.log(postedOption);
+                window.location.href = "/pages/events";
+            } catch (error) {
+                console.error("Error sending option:", error);
+            }
         });
 
         container.appendChild(button);
 
         const optionText = document.createElement("p");
-        optionText.textContent = option;
+        optionText.textContent = option.text;
         
         div.appendChild(optionText);
         div.appendChild(button);
         container.appendChild(div);
     });
-}
-
-/* Send Option Button */
-async function applyOutcome(option) {
-    // Retrieve User Data
-    const userJson = loadUser(login.id);
-
-    console.log(userJson);
 }
 
 /* Modified Data */

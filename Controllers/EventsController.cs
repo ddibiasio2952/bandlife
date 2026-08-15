@@ -42,6 +42,7 @@ namespace BandLife.Controllers
                 .Select(e => new EventResponseDto
                 {
                     Id = e.Id,
+                    Name = e.Name,
                     Category = e.Category,
                     Description = e.Description,
 
@@ -77,6 +78,7 @@ namespace BandLife.Controllers
                 .Select(e => new EventResponseDto
                 {
                     Id = e.Id,
+                    Name = e.Name,
                     Category = e.Category,
                     Description = e.Description,
 
@@ -166,7 +168,31 @@ namespace BandLife.Controllers
             {
                 return Unauthorized();
             }
+            var selectedOption = await _context.EventOptions
+                .AsNoTracking()
+                .FirstOrDefaultAsync(option =>
+            option.Id == request.EventOptionId);
 
+            if (selectedOption is null)
+            {
+                return NotFound(new
+                {
+                    message = "The selected option does not exist.",
+                    receivedOptionId = request.EventOptionId
+                });
+            }
+
+            if (selectedOption.EventId != eventId)
+            {
+                return BadRequest(new
+                {
+                    message = "The selected option does not belong to this event.",
+                    receivedEventId = eventId,
+                    receivedOptionId = request.EventOptionId,
+                    optionEventId = selectedOption.EventId
+                });
+            }
+            /*
             var selectedOption = await _context.EventOptions
                 .AsNoTracking()
                 .FirstOrDefaultAsync(option =>
@@ -176,10 +202,10 @@ namespace BandLife.Controllers
             if (selectedOption == null) {
                 return NotFound(new
                 {
-                    message = "The selected option does not belong ot this event."
+                    message = "The selected option does not belong to this event."
                 });
             }
-
+            */
 
             // Assign new Status array with previous Status array and selectedOption.Outcome
             user.Status = [.. user.Status, selectedOption.Outcome];
