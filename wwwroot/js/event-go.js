@@ -3,11 +3,16 @@
 /******************/
 
 // Imports
-import { requireLogin, requireRole } from "./auth.js";
+import { initializeAuthorizedPage, Roles } from "./auth.js";
 import { loadEventAction, loadUser } from "./api.js";
 
-/* Check if User is logged in */
-requireLogin();
+/* Check if User is logged in with Profile API call */
+// API call
+const profileData = await initializeAuthorizedPage([
+    Roles.USER,
+    Roles.MODERATOR,
+    Roles.ADMIN
+]);
 
 /* Load User's Events */
 loadEventAction(eventId);

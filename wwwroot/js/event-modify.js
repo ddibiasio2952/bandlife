@@ -3,23 +3,15 @@
 /********************/
 
 // Imports
-import { requireLogin, requireRole } from "./auth.js";
+import { initializeAuthorizedPage, Roles } from "./auth.js";
 import { getEvent, modifyEvent } from "./api.js";
 
-/* Check if User is logged in */
-const currentUser = await requireLogin();
-
-if (currentUser) {
-    console.log("Loading user.");
-
-    // Load Profile
-    document.body.classList.remove("authentication-pending");
-    //await loadProfile();
-
-} else {
-    // Redirect to login page
-    window.location.href = "../login.html";
-}
+/* Check if User is logged in with Profile API call */
+// API call
+const profileData = await initializeAuthorizedPage([
+    Roles.MODERATOR,
+    Roles.ADMIN
+]);
 
 // Get Event Id from URL
 const params = new URLSearchParams(window.location.search);

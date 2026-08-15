@@ -28,6 +28,10 @@ html {
     display: none;
 }
 
+#main-nav .hidden {
+    display: none;
+}
+
 /*/\/\/\ MAIN LAYOUT SCHEMA /\/\/\*/
 /* Grid Properties */
 #wrapper {
@@ -157,6 +161,23 @@ h4 {
     margin: -.5rem auto;
 }
 
+#remember-login {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+#remember-me-check {
+    margin-left: -2rem;
+    margin-right: -6rem;
+}
+
+#remember-me-label {
+    margin: 0 auto;
+}
+
 #content-head {
     grid-area: content-head;
 }
@@ -186,8 +207,6 @@ h4 {
     gap: 2rem;
     align-items: flex-start;
 }
-
-
 
 #profile-text {
     grid-area: profile-text;

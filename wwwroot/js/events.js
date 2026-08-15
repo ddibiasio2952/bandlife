@@ -9,6 +9,7 @@ import { initializeAuthorizedPage, Roles } from "./auth.js";
 /* Check if User is logged in with Profile API call */
 // API call
 const profileData = await initializeAuthorizedPage([
+    Roles.USER,
     Roles.MODERATOR,
     Roles.ADMIN
 ]);
@@ -16,7 +17,7 @@ const profileData = await initializeAuthorizedPage([
 if (profileData) {
     // Populate page
     //loadProfile(profileData);
-} 
+}
 
 // Load Events
 const loadedEvents = await getEvents();
@@ -32,7 +33,22 @@ function eventChooser(loadedEvents, profileData) {
     console.log("User's Events: ", profileData.events);
     console.log("Events: ", loadedEvents.length);
 
-    eventQueue = loadedEvents;
+    // Conditional Processing for Event Queue
+    if (profileData.events === 0) {
+        /* Load only first event for new User */
+        eventQueue = loadedEvents.splice(0, 1);
+
+    } else if (profileData.events === 1) {
+        /* Load member events */
+        eventQueue = loadedEvents.splice(1, 3);
+
+    } else if (profileData.events < loadedEvents.length) {
+        eventQueue = loadedEvents.splice(profileData.events, profileData.events + 5);
+    } else {
+        /* Load no Events if User is caught up */
+        alert("No events available. Go write some music!");
+        return;
+    }
 
     // Send Event Queue to table
     populateEventTable(eventQueue);
@@ -53,9 +69,9 @@ function populateEventTable(eventQueue) {
         const rightCell = document.createElement("td");
         const button = document.createElement("button");
 
-        button.textContent = "Modify";
+        button.textContent = "Go!";
         button.addEventListener("click", () => {
-            window.location.href = `/ProtectedPages/event-modify?id=${event.id}`;
+            window.location.href = `/ProtectedPages/event-go?id=${event.id}`;
         });
 
         // Update row elements

@@ -15,7 +15,7 @@ export const Roles = Object.freeze({
 
 /* General authentication check */
 export async function initializeAuthorizedPage(allowedRoles) {
-
+    console.log("Allowd Roles: ", allowedRoles)
     try {
         // Verify authentication and role
         const authData = await requireRole(allowedRoles);
@@ -26,6 +26,8 @@ export async function initializeAuthorizedPage(allowedRoles) {
 
         // Load profile data for page population
         const profileData = await getProfile();
+        console.log("Auth Data:", authData.roles);
+        console.log("Profile Data:", profileData);
 
         if (!profileData) {
 
@@ -33,7 +35,15 @@ export async function initializeAuthorizedPage(allowedRoles) {
             return null;
         }
 
-        // Load HTML elements with successful login
+        // Load HTML elements with successful login and populate accordingly
+        if (authData.roles.includes("Moderator") || authData.roles.includes("Admin")) {
+            const navLinks = document.querySelectorAll(".nav-link.hidden");
+            // Nav content
+            navLinks.forEach(navLink => {
+                navLink.classList.remove("hidden");
+            });
+        }
+        // Page content
         document.body.classList.remove("authentication-pending");
 
         // Return profile data for page population

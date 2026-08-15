@@ -13,9 +13,10 @@ const profileData = await initializeAuthorizedPage([
     Roles.ADMIN
 ]);
 
+// Populate page if profile data is available
 if (profileData) {
-    // Populate page
     loadProfile(profileData);
+    loadProfileText(profileData);
 }
 
 
@@ -37,4 +38,13 @@ function loadProfile(userData) {
     document.getElementById("band-income").textContent = userData.bandIncome;
     document.getElementById("listeners").textContent = userData.listeners;
     document.getElementById("popularity").textContent = userData.popularity;
+}
+
+function loadProfileText(userData) {
+    document.getElementById("profile-one").textContent = `
+    ${userData.band} is a basement ${userData.genres[0]} band.
+    The band boasts ${userData.members} members, with the leader and founding member ${userData.name} on ${userData.instrument} duties.
+    The band currently has ${userData.releases.length} releases and ${userData.listeners} listeners.
+    When asked about ${userData.band}'s music, the average person responds with, ${userData.popularity}
+    `;
 }
