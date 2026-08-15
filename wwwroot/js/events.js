@@ -3,7 +3,7 @@
 /*****************************/
 
 // Imports
-import { getUser, getEvents } from "./api.js";
+import { getEvents } from "./api.js";
 import { initializeAuthorizedPage, Roles } from "./auth.js";
 
 /* Check if User is logged in with Profile API call */
@@ -45,8 +45,6 @@ function eventChooser(loadedEvents, profileData) {
     } else if (profileData.events < loadedEvents.length) {
         eventQueue = loadedEvents.splice(profileData.events, profileData.events + 5);
     } else {
-        /* Load no Events if User is caught up */
-        alert("No events available. Go write some music!");
         return;
     }
 
@@ -71,7 +69,7 @@ function populateEventTable(eventQueue) {
 
         button.textContent = "Go!";
         button.addEventListener("click", () => {
-            window.location.href = `/ProtectedPages/event-go?id=${event.id}`;
+            window.location.href = `/pages/event-go?id=${event.id}`;
         });
 
         // Update row elements

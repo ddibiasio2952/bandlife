@@ -16,13 +16,12 @@ const profileData = await initializeAuthorizedPage([
 // Populate page if profile data is available
 if (profileData) {
     loadProfile(profileData);
-    loadProfileText(profileData);
+    
 }
 
 
 /* Load profile */
 function loadProfile(userData) {
-    // const userData = await 
     document.getElementById("band").textContent = userData.band;
     
     document.getElementById("genre").textContent = userData.genres[0];
@@ -38,13 +37,64 @@ function loadProfile(userData) {
     document.getElementById("band-income").textContent = userData.bandIncome;
     document.getElementById("listeners").textContent = userData.listeners;
     document.getElementById("popularity").textContent = userData.popularity;
+
+    loadProfileTextConditional(userData);
 }
 
-function loadProfileText(userData) {
-    document.getElementById("profile-one").textContent = `
-    ${userData.band} is a basement ${userData.genres[0]} band.
-    The band boasts ${userData.members} members, with the leader and founding member ${userData.name} on ${userData.instrument} duties.
-    The band currently has ${userData.releases.length} releases and ${userData.listeners} listeners.
-    When asked about ${userData.band}'s music, the average person responds with, ${userData.popularity}
-    `;
+// Conditional flow for profile text
+function loadProfileTextConditional(userData) {
+    const paragraphOne = document.getElementById("profile-one");
+    const paragraphTwo = document.getElementById("profile-two");
+
+    let paraOneSentOne = "";
+    let paraOneSentTwo = "";
+    let paraOneSentThree = "";
+    let paraOneSentFour = "";
+
+
+    // Conditional structure for paragraph one
+    // Handles fame in sentences one and four
+    if (userData.listeners < 100) {
+        paraOneSentOne = `${userData.band} is a basement ${userData.genres[0]} band. `;
+        paraOneSentFour = `When asked about ${userData.band}'s music, the average person responds with, ${userData.popularity}`
+    } else {
+        paraOneSentOne = `${userData.band} is a ${userData.genres[0]} band. `;
+        paraOneSentFour = `When asked about ${userData.band}'s music, the average person responds with, ${userData.popularity}`
+    }
+
+    // Handles members sentence
+    if (userData.members < 2) {
+        paraOneSentTwo = `The band only features the founding member ${userData.name} on ${userData.instrument} duties. `
+    } else {
+        paraOneSentTwo = `The band boasts ${userData.members} members. The leader and founding member is ${userData.name} on ${userData.instrument} duties. `
+    }
+
+    // Handles release sentence
+    if (userData.releases.length === 0) {
+        paraOneSentThree = `The band currently has no releases and ${userData.listeners} listeners. `
+    } else if (userData.releases.length === 1) {
+        paraOneSentThree = `The band currently has 1 release and ${userData.listeners} listeners. `
+    } else {
+        `The band currently has ${userData.releases.length} releases and ${userData.listeners} listeners. `
+    }
+
+    // Display paragraph contents
+    paragraphOne.textContent =
+        paraOneSentOne + paraOneSentTwo + paraOneSentThree + paraOneSentFour;
+
+    paragraphTwo.textContent = userData.status.join(" ");
 }
+
+/*
+function loadProfileText(userData) {
+document.getElementById("profile-one").textContent = `
+${userData.band} is a basement ${userData.genres[0]} band.
+The band boasts ${userData.members} members, with the leader and founding member ${userData.name} on ${userData.instrument} duties.
+The band currently has ${userData.releases.length} releases and ${userData.listeners} listeners.
+When asked about ${userData.band}'s music, the average person responds with, ${userData.popularity}
+`;
+
+document.getElementById("profile-two").textContent = `
+${userData.status}
+`
+}*/

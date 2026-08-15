@@ -6,11 +6,6 @@
 /* GET APIS */
 /***********/
 
-/* Get User data by Id */ 
-export async function getUser(userId) {
-}
-
-
 /* Get Event by Id */
 export async function getEvent(eventId) {
     const response = await fetch(`/api/events/${eventId}`);
@@ -32,28 +27,7 @@ export async function loadEventAction(eventId) {
         throw new Error(`Get event failed: ${response.status}`);
     }
 
-    const loadedEvent = await response.json();
-
-    renderOptions(loadedEvent);
-}
-
-/* Load User Data */ // API
-export async function loadUser(userId) {
-    /*
-    const response = await fetch(`/api/users/${userId}`)
-    if (!response.ok) {
-        throw new Error(`HTTP Error: ${response.status}`);
-    }
-    // Retrieve user data
-    const userJson = await response.json();
-
-    // Load Event list if on Event List page
-    if (window.location.pathname === "/pages/event-list.html") {
-        loadEvents(userJson);
-    } else {
-        return userJson;
-    }
-    */
+    return await response.json();
 }
 
 /* Get User's Events */ 
@@ -88,6 +62,34 @@ export async function postUser(newUserData) {
     return await response.json();
 }
 
+/* Post Event Go Option choice */
+export async function applyOutcome(eventId, eventOptionId) {
+    const response = await fetch(`/api/events/${eventId}/choose`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            eventOptionId: eventOptionId
+        })
+    });
+
+    if (!response.ok) {
+        const responseBody = await response.text();
+
+        console.error("Status:", response.status);
+        console.error("Response:", responseBody);
+
+        throw new Error(
+            responseBody ||
+            `Post Event option failed. Status: ${response.status}`
+        );
+    }
+
+    return await response.json();    
+}
+
 /* Post login User data */
 export async function login(loginData) {
     const response = await fetch("/api/account/login?useCookies=true", {
@@ -107,7 +109,7 @@ export async function login(loginData) {
 
     console.log(body.message);
 
-    return body;;
+    return body;
 }
 
 /* Post logout */
