@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using BandLife.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BandLife.Data;
@@ -10,6 +12,7 @@ using BandLife.Models.Domain;
 
 namespace BandLife.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class EventsController : ControllerBase
@@ -22,13 +25,15 @@ namespace BandLife.Controllers
         }
 
         // GET: api/Events
+        [Authorize(Roles = AppRoles.User + "," + AppRoles.Moderator + "," + AppRoles.Admin)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Event>>> GetEvents()
         {
             return await _context.Events.ToListAsync();
         }
 
-        // GET: api/Events/5
+        // GET: api/Events/#
+        [Authorize(Roles = AppRoles.User + "," + AppRoles.Moderator + "," + AppRoles.Admin)]
         [HttpGet("{id}")]
         public async Task<ActionResult<Event>> GetEvent(int id)
         {
@@ -42,8 +47,19 @@ namespace BandLife.Controllers
             return @event;
         }
 
-        // PUT: api/Events/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // POST: api/Events
+        [Authorize(Roles = AppRoles.Moderator + "," + AppRoles.Admin)]
+        [HttpPost]
+        public async Task<ActionResult<Event>> PostEvent(Event @event)
+        {
+            _context.Events.Add(@event);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetEvent), new { id = @event.Id }, @event);
+        }
+
+        // PUT: api/Events/#
+        [Authorize(Roles = AppRoles.Moderator + "," + AppRoles.Admin)]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutEvent(int id, Event @event)
         {
@@ -73,19 +89,8 @@ namespace BandLife.Controllers
             return NoContent();
         }
 
-        // POST: api/Events
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Event>> PostEvent(Event @event)
-        {
-            _context.Events.Add(@event);
-            await _context.SaveChangesAsync();
-
-            // return CreatedAtAction("GetEvent", new { id = @event.Id }, @event);
-            return CreatedAtAction(nameof(GetEvent), new { id = @event.Id }, @event);
-        }
-
-        // DELETE: api/Events/5
+        // DELETE: api/Events/#
+        [Authorize(Roles = AppRoles.Admin)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEvent(int id)
         {
@@ -101,6 +106,7 @@ namespace BandLife.Controllers
             return NoContent();
         }
 
+        // Verify if an event exists by its Id
         private bool EventExists(int id)
         {
             return _context.Events.Any(e => e.Id == id);

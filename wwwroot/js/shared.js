@@ -2,6 +2,8 @@
 /* SHARED RESOURCES */
 /*******************/
 
+import { logoutUser } from "./api.js";
+
 // Fetch HTML template
 const templateResponse = await fetch("../templates/template.html");
 
@@ -17,12 +19,13 @@ const template = parser.parseFromString(templateHtml, "text/html");
 const mainNavTemplate = template.getElementById("main-nav-template");
 const mainFooterTemplate = template.getElementById("main-footer-template");
 
-/* Populate Main Navbar */
+/* Populate Template Function */
 function populateTemplate(elementId, template) {
     const targetElement = document.getElementById(elementId);
 
     // Verify target element and template exist
     if (targetElement && template) {
+        // Append template content to target element
         targetElement.appendChild(template.content.cloneNode(true));
     } else {
         // Log warning if unsuccessful
@@ -35,17 +38,21 @@ populateTemplate("main-nav", mainNavTemplate);
 populateTemplate("main-footer", mainFooterTemplate);
 
 /* Log Out Button Listener */
-if (document.querySelector(".main-nav")) {
+if (document.getElementById("main-nav")) {
     const logoutButton = document.getElementById("log-out");
 
     logoutButton.addEventListener("click", async () => {
-        localStorage.removeItem("user");
+        try {
+            await logoutUser();
 
-        // Check if removal was successful
-        if (localStorage.getItem("user") === null) {
-            console.log("Removed user data from localStorage");
-        } else {
-            console.error('Failed to  remove user data from localStorage');
+            console.log("Logout successful.");
+
+            // Redirect to login page
+            window.location.href = "../login.html";
         }
+        catch (error) {
+            console.error(error);
+        }
+
     });
 }

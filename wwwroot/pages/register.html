@@ -15,7 +15,7 @@
             <header id="main-head">
                 <p>BandLife</p>
             </header>
-            <nav class="main-nav">
+            <nav id="register-nav">
                 <ul>
                     <li><a href="../login.html" class="nav-link" id="log-in">Log In</a></li>
                 </ul>
@@ -24,10 +24,24 @@
             <!-- Log In -->
             <article class="content">
                 <section>
-                    <form id="register">
+                    <form id="register" method="POST">
                         <fieldset>
                             <label for="email">Email</label>
                             <input type="email" id="email" minlength="3" maxlength="50" required />
+                            <label for="password">Password</label>
+                            <input type="password"
+                                   id="password"
+                                   minlength="8"
+                                   maxlength="30"
+                                   autocomplete="new-password"
+                                   required />
+                            <label for="confirm-password">Confirm Password</label>
+                            <input type="password"
+                                   id="confirm-password"
+                                   minlength="8"
+                                   maxlength="30"
+                                   autocomplete="new-password"
+                                   required />
                             <label for="name">Your Name</label>
                             <input type="text" id="name" spellcheck="false" minlength="2" maxlength="25" required />
                             <label for="band">Band Name</label>

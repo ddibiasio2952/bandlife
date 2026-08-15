@@ -1,12 +1,22 @@
-import { postEvent } from "./api.js";
-
-const addEventForm = document.getElementById("add-event");
-
-// Added all below to event-modify.js
-
 /*******************/
 /* EVENT ADD PAGE */
 /*****************/
+
+// Imports
+import { initializeAuthorizedPage, Roles } from "./auth.js";
+import { postEvent } from "./api.js";
+
+/* Check if User is logged in with Profile API call */
+// API call
+const profileData = await initializeAuthorizedPage([
+    Roles.MODERATOR,
+    Roles.ADMIN
+]);
+
+// Get Add Event form element
+const addEventForm = document.getElementById("add-event");
+
+// Added all below to event-modify.js
 
 /* Submit new Event Button */
 addEventForm.addEventListener("submit", async (event) => {
@@ -23,7 +33,7 @@ addEventForm.addEventListener("submit", async (event) => {
         alert("Event creation successful!");
 
         // Redirect to Event List if successful
-        window.location.href = './event-list.html';
+        window.location.href = "./event-list";
 
     } catch (error) {
         console.error(error);

@@ -3,38 +3,34 @@
 /***************/
 
 // Imports
-import { getUser } from "./api.js";
+import { initializeAuthorizedPage, Roles } from "./auth.js";
 
-/*
-const registerForm = document.getElementById("register");
-const loginForm = document.getElementById("login");
-const openLogin = document.querySelector(".login-text");
-const closeLogin = document.getElementById("close-modal");
-const login = document.querySelector(".modal-login");
-const loginButton = document.getElementById("submit-login");
-*/
+/* Check if User is logged in with Profile API call */
+// API call
+const profileData = await initializeAuthorizedPage([
+    Roles.USER,
+    Roles.MODERATOR,
+    Roles.ADMIN
+]);
 
-// Get current User data with User Id from localStorage
-const storedLogin = JSON.parse(localStorage.getItem("user"));
-const userData = await getUser(storedLogin.id);
+// Populate page if profile data is available
+if (profileData) {
+    loadProfile(profileData);
+    loadProfileText(profileData);
+}
 
-// Load User profile
-loadProfile(userData);
 
 /* Load profile */
 function loadProfile(userData) {
-    /*
-    document.getElementById("band-status").textContent = userData.status;
-    populateArray(".status", loadedEvent.status);
-    */
+    // const userData = await 
     document.getElementById("band").textContent = userData.band;
     
     document.getElementById("genre").textContent = userData.genres[0];
     document.getElementById("members").textContent = userData.members;
 
     userData.releases.length === 0 ?
-        document.getElementById("releases").textContent = 0 :
-        document.getElementById("releases").textContent = userData.releases;
+    document.getElementById("releases").textContent = 0 :
+    document.getElementById("releases").textContent = userData.releases;
     
     document.getElementById("job").textContent = userData.job;
     document.getElementById("job-income").textContent = userData.jobIncome;
@@ -44,18 +40,11 @@ function loadProfile(userData) {
     document.getElementById("popularity").textContent = userData.popularity;
 }
 
-/*
-const band = document.getElementById("band");
-const bandStatus = document.getElementById("band-status");
-
-const genre = document.getElementById("genre");
-const members = document.getElementById("members");
-const releases = document.getElementById("releases");
-
-const job = document.getElementById("job");
-const jobIncome = document.getElementById("job-income");
-
-const bandIncome = document.getElementById("band-income");
-const listeners = document.getElementById("listeners");
-const popularity = document.getElementById("popularity");
-*/
+function loadProfileText(userData) {
+    document.getElementById("profile-one").textContent = `
+    ${userData.band} is a basement ${userData.genres[0]} band.
+    The band boasts ${userData.members} members, with the leader and founding member ${userData.name} on ${userData.instrument} duties.
+    The band currently has ${userData.releases.length} releases and ${userData.listeners} listeners.
+    When asked about ${userData.band}'s music, the average person responds with, ${userData.popularity}
+    `;
+}

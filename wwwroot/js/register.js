@@ -13,21 +13,13 @@ function readNewUserForm() {
     // Return new User data from form
     return {
         email: document.getElementById("email").value,
+        password: document.getElementById("password").value,
         name: document.getElementById("name").value,
         band: document.getElementById("band").value,
         instrument: document.getElementById("instrument").value,
         genres: [...document.querySelectorAll(".genre")]
             .map(input => input.value.trim())
             .filter(value => value !== ""),
-        status: [],
-        members: 1,
-        events: 0,
-        job: "Jobless",
-        jobincome: 0,
-        bandincome: 0,
-        popularity: "\"Who?\"",
-        listeners: 0,
-        releases: []
     };
 }
 
@@ -36,18 +28,24 @@ registerForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     // Read new User form
+    const password = document.getElementById("password").value;
+    const confirmedPassword = document.getElementById("confirm-password").value;
+
+    if (password !== confirmedPassword) {
+        alert("Passwords do not match.");
+        return;
+    }
+
     const newUserData = readNewUserForm();
 
     try {
         // API call
-        const newUser = await postUser(newUserData);
+        const createdUser = await postUser(newUserData);
 
-        console.log(newUser);
-        // Store User data to localStorage
-        localStorage.setItem("user", JSON.stringify(newUser));
+        console.log(createdUser);
 
-        // Redirect to Home if successful
-        window.location.href = './pages/home.html';
+        // Redirect to Profile if successful
+        window.location.href = '/pages/profile';
 
     }
     catch (error) {

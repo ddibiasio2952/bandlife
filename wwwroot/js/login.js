@@ -3,30 +3,48 @@
 /*************/
 
 // Imports
-import { getBandName, postUser } from "./api.js";
+import { login } from "./api.js";
 
+console.log("Current origin:", window.location.origin);
+// Get Login button element
+const loginForm = document.getElementById("login-form");
 
-// Get Login modal and form elements
-// const loginForm = document.getElementById("login");
+/* Login button */
+loginForm.addEventListener("submit", async event => {
+    event.preventDefault();
 
-const loginButton = document.getElementById("submit-login");
+    // Read Login request
+    const loginRequest = {
+        email: document.getElementById("login-email").value,
+        password: document.getElementById("login-password").value,
+        rememberMe: document.getElementById("remember-me").checked
+    };
 
-/* Search login button */
-loginButton.addEventListener("click", async () => {
-    // Read band name from login modal
-    const bandName = document.getElementById("login-band").value;
     try {
-        // API call with band name
-        const userData = await getBandName(bandName);
+        // API call with user credentials
+        const userData = await login(loginRequest);
 
-        // Store User data to localStorage
-        localStorage.setItem("user", JSON.stringify(userData));
+        // Redirect to Profile if successful
+        console.log("Logged in:", userData);
 
-        // Redirect to Home if successful
-        window.location.href = './pages/profile.html';
+        // Diagnostic Endpoint
+        console.log("Diagnostic Endpoint Begin");
+        const response = await fetch("/api/account/debug-auth", {
+            credentials: "include"
+        });
+
+        console.log(await response.json());
+        console.log("Diagnostic Endpoint End");
+        console.log("Redirecting to profile page...");
+        window.location.href = "/pages/profile";
 
     } catch (error) {
         console.error(error);
-        alert("Unable to find band.");
+        const errorMessage = document.getElementById("login-error-message");
+
+        // Display error message if login fails 
+        if (errorMessage) {
+            errorMessage.textContent = error.message;
+        }
     }
 });
