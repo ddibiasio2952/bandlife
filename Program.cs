@@ -61,7 +61,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(); // Serves the interactive Swagger UI
 
     // Assign admin role to the first registered user
-    //await DevelopmentUserSeeder.AssignAdminRoleAsync(app.Services, "mail@mail.com");
+    //await DevelopmentUserSeeder.AssignAdminRoleAsync(app.Services, "adminmail@mail.com");
 
 }
 
