@@ -84,9 +84,6 @@ User accounts are managed through ASP.NET Core Identity and extended with game-s
 ## Project Structure
 
 ```text
-## Project Structure
-
-```text
 BandLife/
 ├── Authorization/     Role definitions
 ├── Controllers/       API controllers and endpoint logic
@@ -158,6 +155,13 @@ dotnet run
 
 The exact port may differ depending on the development environment.
 
+6. Register or Log In
+   
+You can log in with one of the following accounts from the SQL database backup:
+* email: adminmail@mail.com, password: Password1 (admin user)
+* email: usermail@mail.com, password: Password1 (regular user)
+* email: johndoe@mail.com, password: Password1 (regular user)
+
 ## API Documentation
 
 When the application is running in the development environment, Swagger can be used to inspect and test the available API endpoints.
@@ -169,14 +173,6 @@ https://localhost:<port>/swagger
 ```
 
 Some endpoints require an authenticated account or a specific Identity role.
-
-6. Register or Log In
-   
-You can log in with one of the following accounts from the SQL database backup:
-* email: adminmail@mail.com, password: Password1 (admin user)
-* email: usermail@mail.com, password: Password1 (regular user)
-* email: johndoe@mail.com, password: Password1 (regular user)
-
 
 ## Project Status
 
