@@ -113,10 +113,18 @@ namespace BandLife.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateEvent(CreateEventRequest request)
         {
-            if (request.Options.Count == 0)
+            // Reject less than two options
+            if (request.Options.Count < 2)
             {
                 return BadRequest(
-                    "An event must have at least one option.");
+                    "An event must have at least two options.");
+            }
+
+            // Reject more than 4 options
+            if (request.Options.Count > 4)
+            {
+                return BadRequest(
+                    "An event must have less than five options.");
             }
 
             // Create parent Event
@@ -158,6 +166,7 @@ namespace BandLife.Controllers
         }
 
         // POST: api/Events/#/choose
+        // For a user choosing an option to play
         [Authorize(Roles = AppRoles.User + "," + AppRoles.Moderator + "," + AppRoles.Admin)]
         [HttpPost("{eventId:int}/choose")]
         public async Task<IActionResult> ChooseEventOption(int eventId, ChooseEventOptionDto request)
@@ -192,20 +201,6 @@ namespace BandLife.Controllers
                     optionEventId = selectedOption.EventId
                 });
             }
-            /*
-            var selectedOption = await _context.EventOptions
-                .AsNoTracking()
-                .FirstOrDefaultAsync(option =>
-                    option.Id == request.EventOptionId &&
-                    option.EventId == eventId);
-
-            if (selectedOption == null) {
-                return NotFound(new
-                {
-                    message = "The selected option does not belong to this event."
-                });
-            }
-            */
 
             // Assign new Status array with previous Status array and selectedOption.Outcome
             user.Status = [.. user.Status, selectedOption.Outcome];
@@ -256,6 +251,7 @@ namespace BandLife.Controllers
         }
 
         // PUT: api/Events/#
+        // Modify existing Event and Option(s)
         [Authorize(Roles = AppRoles.Moderator + "," + AppRoles.Admin)]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> PutEvent(int id, UpdateEventDto request)
@@ -305,8 +301,7 @@ namespace BandLife.Controllers
 
                     existingOption.Text = requestedOption.Text;
                     existingOption.Outcome = requestedOption.Outcome;
-                    existingOption.MembersModifier =
-                        requestedOption.MembersModifier;
+                    existingOption.MembersModifier = requestedOption.MembersModifier;
                     existingOption.NewJob = requestedOption.NewJob;
                     existingOption.JobIncomeModifier = requestedOption.JobIncomeModifier;
                     existingOption.BandIncomeModifier = requestedOption.BandIncomeModifier;
@@ -327,6 +322,59 @@ namespace BandLife.Controllers
                     });
                 }
             }
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        // PUT: api/Events/event/#
+        // Modify existing Event
+        [Authorize(Roles = AppRoles.Moderator + "," + AppRoles.Admin)]
+        [HttpPut("event/{id:int}")]
+        public async Task<IActionResult> PutEventOnly(int id, UpdateEventDto request)
+        {
+            var existingEvent = await _context.Events
+                .FirstOrDefaultAsync(e => e.Id == id);
+
+            if (existingEvent == null)
+            {
+                return NotFound();
+            }
+
+            //Update an existing Event
+            existingEvent.Name = request.Name;
+            existingEvent.Category = request.Category;
+            existingEvent.Description = request.Description;
+
+
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        // PUT: api/Events/option/#
+        // Modify existing Option
+        [Authorize(Roles = AppRoles.Moderator + "," + AppRoles.Admin)]
+        [HttpPut("option/{id:int}")]
+        public async Task<IActionResult> PutOption(int id, UpdateEventOptionDto request)
+        {
+            var existingOption = await _context.EventOptions
+                .FirstOrDefaultAsync(o => o.Id == id);
+
+            if (existingOption == null)
+            {
+                return NotFound();
+            }
+
+            //Update an existing Option
+            existingOption.Text = request.Text;
+            existingOption.Outcome = request.Outcome;
+            existingOption.MembersModifier = request.MembersModifier;
+            existingOption.NewJob = request.NewJob;
+            existingOption.JobIncomeModifier = request.JobIncomeModifier;
+            existingOption.BandIncomeModifier = request.BandIncomeModifier;
+            existingOption.NewPopularityLevel = request.NewPopularityLevel;
+            existingOption.ListenersModifier = request.ListenersModifier;
+
+
             await _context.SaveChangesAsync();
             return NoContent();
         }

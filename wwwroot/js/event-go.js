@@ -22,6 +22,7 @@ const eventId = params.get("id");
 const loadedEvent = await loadEventAction(eventId);
 console.log("Loaded Event", loadedEvent);
 
+// Populate page with Options if Event is loaded
 if (loadedEvent) {
     renderOptions(loadedEvent);
 }
@@ -68,19 +69,4 @@ function renderOptions(loadedEvent) {
         div.appendChild(button);
         container.appendChild(div);
     });
-}
-
-/* Modified Data */
-function getModifyData() {
-    return {
-        id: eventId,
-        name: document.getElementById("name").value,
-        description: document.getElementById("description").value,
-        options: [...document.querySelectorAll(".option")]
-            .map(input => input.value.trim())
-            .filter(value => value !== ""),
-        outcomes: [...document.querySelectorAll(".outcome")]
-            .map(input => input.value.trim())
-            .filter(value => value !== ""),
-    };
 }

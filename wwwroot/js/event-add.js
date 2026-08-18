@@ -22,10 +22,14 @@ const addEventForm = document.getElementById("add-event");
 addEventForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    // Read new Event form
-    const eventData = readAddEventForm();
-
     try {
+        // Read new Event form
+        const eventData = readAddEventForm();
+
+        if (eventData.options.length < 2) {
+            throw new Error("The event must have at least two options.");
+        }
+
         // API call
         const createdEvent = await postEvent(eventData);
 
@@ -33,7 +37,7 @@ addEventForm.addEventListener("submit", async (event) => {
         alert("Event creation successful!");
 
         // Redirect to Event List if successful
-        window.location.href = "./event-list";
+        window.location.href = "/pages/event-list";
 
     } catch (error) {
         console.error(error);
@@ -45,28 +49,41 @@ addEventForm.addEventListener("submit", async (event) => {
 function readAddEventForm() {
     // Return new Event data from form
     return {
-        name: document.getElementById("name").value,
-        category: document.getElementById("category").value,
-        description: document.getElementById("description").value,
-        options: [...document.querySelectorAll(".options")]
-            .map(input => input.value.trim())
-            .filter(value => value !== ""),
-        outcomes: [...document.querySelectorAll(".outcomes")]
-            .map(input => input.value.trim())
-            .filter(value => value !== ""),
-        members: [...document.querySelectorAll(".members")]
-            .map(input => input.value === "" ? "0" : input.value),
-        job: [...document.querySelectorAll(".job")]
-            .map(input => input.value.trim())
-            .filter(value => value !== ""),
-        jobincome: [...document.querySelectorAll(".job-income")]
-            .map(input => input.value === "" ? "0" : input.value),
-        bandincome: [...document.querySelectorAll(".band-income")]
-            .map(input => input.value === "" ? "0" : input.value),
-        popularity: [...document.querySelectorAll(".popularity")]
-            .map(input => input.value.trim())
-            .filter(value => value !== ""),
-        listeners: [...document.querySelectorAll(".listeners")]
-            .map(input => input.value === "" ? "0" : input.value)
+        name: document.getElementById("name").value.trim(),
+        category: document.getElementById("category").value.trim(),
+        description: document.getElementById("description").value.trim(),
+        options: getEventOptions()
     };
+}
+
+// Get Event Options
+function getEventOptions() {
+    const optionClasses = [
+        "option-one",
+        "option-two",
+        "option-three",
+        "option-four"
+    ];
+
+    return optionClasses
+        .map(optionClass => getEventOption(optionClass))
+        .filter(option => option.text && option.outcome);
+}
+
+// Get Event Option
+function getEventOption(optionClass) {
+    const inputs = document.querySelectorAll(`.${optionClass}`);
+    const option = {};
+
+    inputs.forEach(input => {
+        const propertyName = input.dataset.field;
+
+        if (input.type === "number") {
+            option[propertyName] = Number(input.value) || 0;
+        } else {
+            option[propertyName] = input.value.trim() || null;
+        }
+    });
+
+    return option;
 }

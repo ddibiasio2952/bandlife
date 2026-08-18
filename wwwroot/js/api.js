@@ -131,6 +131,7 @@ export async function postEvent(eventData) {
         headers: {
             "Content-Type": "application/json"
         },
+        credentials: "include",
         body: JSON.stringify(eventData)
     });
 
@@ -147,7 +148,7 @@ export async function postEvent(eventData) {
 
 /* Put modified Event */
 export async function modifyEvent(eventData, eventId) {
-    const response = await fetch(`/api/events/${eventId}`, {
+    const response = await fetch(`/api/events/event/${eventData.id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
@@ -159,22 +160,25 @@ export async function modifyEvent(eventData, eventId) {
         throw new Error(`Update failed: ${response.status}`);
     }
 
-    await response.json();
+    return;
 }
 
-/* Submit Modified Event */ // REVISE
-export async function submitEvent(eventData) {
-    const response = await fetch(`/api/events/${eventId}`, {
+/* Put modified Option */
+export async function modifyOption(eventOptionData) {
+    //console.log(eventOptionData);    
+    const response = await fetch(`/api/events/option/${eventOptionData.id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(eventData)
+        body: JSON.stringify(eventOptionData)
     });
 
     if (!response.ok) {
         throw new Error(`Update failed: ${response.status}`);
     }
+
+    return;
 }
 
 /****************/

@@ -15,7 +15,7 @@ export const Roles = Object.freeze({
 
 /* General authentication check */
 export async function initializeAuthorizedPage(allowedRoles) {
-    console.log("Allowd Roles: ", allowedRoles)
+    console.log("Allowed Roles: ", allowedRoles)
     try {
         // Verify authentication and role
         const authData = await requireRole(allowedRoles);

@@ -32,6 +32,53 @@ html {
     display: none;
 }
 
+
+/* Modify Modal Popup */
+#modify-modal.hidden {
+    display: none;
+}
+
+#modify-modal {
+    display: flex;
+    position: absolute;
+    display: hidden;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+#modify-modal fieldset {
+    background: var(--background);
+    border-radius: 5px;
+    border: 0.1rem solid var(--border);
+}
+
+#modify-modal input,
+#modify-modal textarea,
+#modify-modal select {
+    width: 100%;
+    color: var(--text);
+    background-color: var(--background);
+    border: 0.1rem solid var(--border);
+    margin: 0.3rem 0;
+}
+
+#close-modal {
+    font-size: 0.8rem;
+    width: 1.1rem;
+    height: 1.1rem;
+    padding: 0;
+    margin: 0 auto;
+    text-align: center;
+    justify-content: center;
+    cursor: pointer !important;
+    top: 0.4rem;
+    right: 0.4rem;
+    color: var(--background);
+    border-radius: 3px;
+    background-color: var(--border);
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+}
+
 /*/\/\/\ MAIN LAYOUT SCHEMA /\/\/\*/
 /* Grid Properties */
 #wrapper {
@@ -111,7 +158,10 @@ html {
     transition-duration: 0.5s;
 }
 
-#main-nav #log-in, #main-nav #log-out, #login-nav #register-link, #register-nav #log-in {
+#main-nav #log-in, 
+#main-nav #log-out, 
+#login-nav #register-link, 
+#register-nav #log-in {
     position: fixed;
     width: 4rem;
     padding: 1rem;
@@ -137,14 +187,7 @@ main {
         linear-gradient(to bottom, var(--background) 28%, 
         transparent 50%, 
         transparent 55%, var(--background) 100%), 
-        url('../images/bg-05.jpg');
-    /*
-    background-image: 
-        radial-gradient(circle, transparent 0%, 
-    var(--background) 90%, 
-    var(--background) 100%), 
-        url('../images/bg-05.jpg');
-        */
+        url('../assets/images/bg-05.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -188,16 +231,6 @@ h4 {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /*
-    background-image: 
-        linear-gradient( to bottom, var(--background) 30%, transparent), 
-        url('../images/bg-02.jpg'), 
-        linear-gradient( to bottom, transparent 50%, var(--background) );
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    */
 }
 
 #profile-content {
@@ -298,7 +331,10 @@ h4 {
     margin: 0 auto 1rem;
     padding: 1rem;
     width: 55vw;
-    border: 0.1rem dotted var(--border);
+    background: var(--background);
+    opacity: 0.85;
+    border: 0.1rem solid var(--border);
+    border-radius: 5px;
 }
 
 /* Form */
@@ -320,8 +356,13 @@ form {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    gap: 0.5rem;
-    border-bottom: 0.1rem dashed var(--border);
+    gap: .5rem;
+    margin: 1rem 0 1rem 1rem;
+    padding: 0.5rem 0 0.5rem 0.5rem;
+    background: var(--background);
+    opacity: 0.85;
+    border: 0.1rem solid var(--border);
+    border-radius: 5px;
     padding-bottom: 0.2rem;
     cursor: pointer !important;
 }
@@ -362,7 +403,18 @@ select {
     background-color: var(--background);
     border: 0.1rem solid var(--border);
     margin: 0.3rem 0;
-    /*font-family: 'Segoe UI', 'Segoe UI Historic', sans-serif;*/
+}
+
+hr {
+    border: 1px solid var(--focus);
+}
+
+.option-span {
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    color: var(--background);
+    background: var(--border);
 }
 
 button {

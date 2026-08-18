@@ -4,7 +4,7 @@
 
 // Imports
 import { initializeAuthorizedPage, Roles } from "./auth.js";
-import { getEvent, modifyEvent } from "./api.js";
+import { getEvent, modifyEvent, modifyOption } from "./api.js";
 
 /* Check if User is logged in with Profile API call */
 // API call
@@ -18,7 +18,16 @@ const params = new URLSearchParams(window.location.search);
 const eventId = params.get("id");
 
 // Get Event form elements
-const modifyButton = document.getElementById("modify-button");
+const modifyEventButton = document.getElementById("modify-event-button");
+const modifyOptionButton = document.getElementById("modify-option-button");
+
+// Popup modal for editing option
+const popupModal = document.getElementById("modify-modal");
+const closeModal = document.getElementById("close-modal");
+// Remove modal display
+closeModal.addEventListener("click", () => {
+    popupModal.classList.toggle("hidden");
+});
 
 // Get Event
 const loadedEvent = await getEvent(eventId);
@@ -34,27 +43,57 @@ function populateForm(loadedEvent) {
     document.getElementById("category").value = loadedEvent.category;
     document.getElementById("description").value = loadedEvent.description;
 
-    // Populate form with Event arrays
-    populateArray(".options", loadedEvent.options);
-    populateArray(".outcomes", loadedEvent.outcomes);
-    populateArray(".members", loadedEvent.members);
-    populateArray(".job", loadedEvent.job);
-    populateArray(".job-income", loadedEvent.jobIncome);
-    populateArray(".band-income", loadedEvent.bandIncome);
-    populateArray(".popularity", loadedEvent.popularity);
-    populateArray(".listeners", loadedEvent.listeners);
-}
+    // Initialize and clear Event Option table body container
+    const tbody = document.querySelector("#event-table tbody");
+    tbody.innerHTML = "";
 
-/* Populate Arrays in form */
-function populateArray(selector, values) {
-    // Get selector classes
-    const inputs = document.querySelectorAll(selector);
+    loadedEvent.options.forEach((option, index) => {
+        const row = document.createElement("tr");
+        const idCell = document.createElement("td");
+        const optionCell = document.createElement("td");
+        const buttonCell = document.createElement("td");
+        const button = document.createElement("button");
+        button.type = "button";
 
-    // Fill selector input fields with Event data
-    inputs.forEach((input, index) => {
-        input.value = values[index] ?? "";
+        button.textContent = "Modify";
+        button.addEventListener("click", () => {
+            popupModal.classList.remove("hidden");
+            popupModal.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            console.log(option);
+            //popupModal.style.display = 'block';
+            showModifyOption(option);
+        });
+
+        // Update row elements
+        idCell.textContent = option.id;
+        optionCell.textContent = option.text;
+        buttonCell.appendChild(button);
+        row.append(idCell, optionCell, buttonCell);
+
+        // Append row to table body
+        tbody.appendChild(row);
     });
 }
+
+/* Populate Option Table */
+function showModifyOption(option) {
+    console.log(option.eventId);
+    // Populate form with Option data
+    const optionId = document.getElementById("option-id").value = option.id;
+    const optionText = document.getElementById("option").value = option.text;
+    const outcomeText = document.getElementById("outcome").value = option.outcome;
+    const members = document.getElementById("members").value = option.membersModifier;
+    const job = document.getElementById("job").value = option.newJob;
+    const jobIncome = document.getElementById("job-income").value = option.jobIncomeModifier;
+    const bandIncome = document.getElementById("band-income").value = option.bandIncomeModifier;
+    const popularity = document.getElementById("popularity").value = option.newPopularityLevel;
+    const listeners = document.getElementById("listeners").value = option.listenersModifier;
+    const eventId = document.getElementById("event-id").value = option.eventId;
+}
+
+/*****************/
+/* MODIFY EVENT */
+/***************/
 
 /* Get modified Event data */
 function readModifyEventForm() {
@@ -64,44 +103,71 @@ function readModifyEventForm() {
         name: document.getElementById("name").value,
         category: document.getElementById("category").value,
         description: document.getElementById("description").value,
-        options: [...document.querySelectorAll(".options")]
-            .map(input => input.value.trim())
-            .filter(value => value !== ""),
-        outcomes: [...document.querySelectorAll(".outcomes")]
-            .map(input => input.value.trim())
-            .filter(value => value !== ""),
-        members: [...document.querySelectorAll(".members")]
-            .map(input => input.value === "" ? "0" : input.value),
-        job: [...document.querySelectorAll(".job")]
-            .map(input => input.value.trim())
-            .filter(value => value !== ""),
-        jobIncome: [...document.querySelectorAll(".job-income")]
-            .map(input => input.value === "" ? "0" : input.value),
-        bandIncome: [...document.querySelectorAll(".band-income")]
-            .map(input => input.value === "" ? "0" : input.value),
-        popularity: [...document.querySelectorAll(".popularity")]
-            .map(input => input.value.trim())
-            .filter(value => value !== ""),
-        listeners: [...document.querySelectorAll(".listeners")]
-            .map(input => input.value === "" ? "0" : input.value)
     };
 }
 
 /* Modify Event Button */
-modifyButton.addEventListener("click", async () => {
+modifyEventButton.addEventListener("click", async () => {
 
     // Read modified Event form
     const modifiedEvent = readModifyEventForm(eventId);
 
     try {
         // API call
-        await modifyEvent(modifiedEvent, eventId);
+        await modifyEvent(modifiedEvent);
 
-        // Redirect to Event List if successful
-        window.location.href = 'event-list.html';
-
+        // Redirect to Events
+        window.location.href = "/pages/event-list";
     } catch (error) {
         console.error(error);
         alert("Unable to modify Event.");
+    }
+});
+
+/******************/
+/* MODIFY OPTION */
+/****************/
+
+/* Get modified Option data */
+function readModifyOptionForm() {
+    // Return modified Event data from form
+    // UpdateEventOptionDto
+    return {
+        id: document.getElementById("option-id").value,
+        text: document.getElementById("option").value,
+        outcome: document.getElementById("outcome").value,
+        membersModifier: document.getElementById("members").value,
+        newJob: document.getElementById("job").value,
+        jobIncomeModifier: document.getElementById("job-income").value,
+        bandIncomeModifier: document.getElementById("band-income").value,
+        newPopularityLevel: document.getElementById("popularity").value,
+        listenersModifier: document.getElementById("listeners").value,
+        //eventId: document.getElementById("event-id").value
+    };
+}
+
+/* Modify Option Button */
+modifyOptionButton.addEventListener("click", async () => {
+
+    // Read modified Event form
+    const modifiedOption = readModifyOptionForm(eventId);
+
+    try {
+        // API call
+        await modifyOption(modifiedOption);
+        // Hide modal
+        popupModal.classList.toggle("hidden");
+
+        // Get Event
+        const refreshedEvent = await getEvent(eventId);
+
+        // Populate inputs form with Event data
+        populateForm(refreshedEvent);
+
+        // Popup
+        alert("Modification successful.");
+    } catch (error) {
+        console.error(error);
+        alert("Unable to modify Event Option.");
     }
 });

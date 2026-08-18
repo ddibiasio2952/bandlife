@@ -14,15 +14,11 @@ const profileData = await initializeAuthorizedPage([
 ]);
 
 if (profileData) {
-    // Populate page
-    //loadProfile(profileData);
+    // Load Events
+    const loadedEvents = await getEvents();
+    // Determine which Events to show
+    eventChooser(loadedEvents, profileData);
 } 
-
-// Load Events
-const loadedEvents = await getEvents();
-
-// Determine which Events to show
-eventChooser(loadedEvents, profileData);
 
 /* Choose Next Events for User */
 function eventChooser(loadedEvents, profileData) {
@@ -50,7 +46,7 @@ function populateEventTable(eventQueue) {
         const row = document.createElement("tr");
         const idCell = document.createElement("td");
         const nameCell = document.createElement("td");
-        const rightCell = document.createElement("td");
+        const buttonCell = document.createElement("td");
         const button = document.createElement("button");
 
         button.textContent = "Modify";
@@ -61,8 +57,8 @@ function populateEventTable(eventQueue) {
         // Update row elements
         idCell.textContent = event.id;
         nameCell.textContent = event.name;
-        rightCell.appendChild(button);
-        row.append(idCell, nameCell, rightCell);
+        buttonCell.appendChild(button);
+        row.append(idCell, nameCell, buttonCell);
 
         // Append row to table body
         tbody.appendChild(row);

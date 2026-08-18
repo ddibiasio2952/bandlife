@@ -32,9 +32,10 @@ function loadProfile(userData) {
     document.getElementById("releases").textContent = userData.releases;
     
     document.getElementById("job").textContent = userData.job;
+    /*document.getElementById("bank-account").textContent = userData.bankAccount;
     document.getElementById("job-income").textContent = userData.jobIncome;
 
-    document.getElementById("band-income").textContent = userData.bandIncome;
+    document.getElementById("band-income").textContent = userData.bandIncome;*/
     document.getElementById("listeners").textContent = userData.listeners;
     document.getElementById("popularity").textContent = userData.popularity;
 
@@ -82,19 +83,47 @@ function loadProfileTextConditional(userData) {
     paragraphOne.textContent =
         paraOneSentOne + paraOneSentTwo + paraOneSentThree + paraOneSentFour;
 
-    paragraphTwo.textContent = userData.status.join(" ");
+    paragraphTwo.textContent = userData.status
+        .map(status => formatStatus(status, userData))
+        .join(" ");
+/*
+    userData.status.forEach(status => {
+        const statusElement = document.createElement("span");
+        statusElement.textContent = `${formatStatus(status, userData)} `;
+
+        paragraphTwo.appendChild(statusElement);
+    })*/
+
+    //paragraphTwo.textContent = userData.status.join(" ");
 }
 
-/*
-function loadProfileText(userData) {
-document.getElementById("profile-one").textContent = `
-${userData.band} is a basement ${userData.genres[0]} band.
-The band boasts ${userData.members} members, with the leader and founding member ${userData.name} on ${userData.instrument} duties.
-The band currently has ${userData.releases.length} releases and ${userData.listeners} listeners.
-When asked about ${userData.band}'s music, the average person responds with, ${userData.popularity}
-`;
+// Replace placeholders in Status array with User profile properties
+function formatStatus(status, userData) {
+    return status.replace(
+        /\{\{([a-zA-Z]\w*)(?:\[(\d+)\])?\}\}/g,
+        (placeholder, propertyName, index) => {
+            const propertyValue = userData[propertyName];
 
-document.getElementById("profile-two").textContent = `
-${userData.status}
-`
-}*/
+            if (propertyValue === undefined || propertyValue === null) {
+                return placeholder;
+            }
+
+            if (index !== undefined) {
+                if (!Array.isArray(propertyValue)) {
+                    return placeholder;
+                }
+
+                return propertyValue[Number(index)] ?? placeholder;
+            }
+
+            if (
+                typeof propertyValue === "string" ||
+                typeof propertyValue === "number"
+            ) {
+                return String(propertyValue);
+            }
+
+            return placeholder;
+        }
+    );
+}
