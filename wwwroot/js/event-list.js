@@ -16,23 +16,9 @@ const profileData = await initializeAuthorizedPage([
 if (profileData) {
     // Load Events
     const loadedEvents = await getEvents();
-    // Determine which Events to show
-    eventChooser(loadedEvents, profileData);
+    // Show list of Events
+    populateEventTable(loadedEvents)
 } 
-
-/* Choose Next Events for User */
-function eventChooser(loadedEvents, profileData) {
-    // Initialize empty Event Queue
-    let eventQueue;
-
-    console.log("User's Events: ", profileData.events);
-    console.log("Events: ", loadedEvents.length);
-
-    eventQueue = loadedEvents;
-
-    // Send Event Queue to table
-    populateEventTable(eventQueue);
-}
 
 /* Populate Event Table */
 function populateEventTable(eventQueue) {

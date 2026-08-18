@@ -60,7 +60,6 @@ function populateForm(loadedEvent) {
             popupModal.classList.remove("hidden");
             popupModal.scrollIntoView({ behavior: 'smooth', block: 'center' });
             console.log(option);
-            //popupModal.style.display = 'block';
             showModifyOption(option);
         });
 

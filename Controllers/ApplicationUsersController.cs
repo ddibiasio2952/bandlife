@@ -1,6 +1,7 @@
 ﻿using BandLife.Data;
 using BandLife.Models.Domain;
 using BandLife.Models.DTOs;
+using BandLife.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -19,11 +20,13 @@ namespace BandLife.Controllers
     public class ApplicationUsersController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly PaycheckService _paycheckService;
 
         public ApplicationUsersController(
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager, PaycheckService paycheckService)
         {
             _userManager = userManager;
+            _paycheckService = paycheckService;
         }
 
         // GET: /api/applicationusers/profile
@@ -37,6 +40,20 @@ namespace BandLife.Controllers
                 return Unauthorized();
             }
 
+            var paycheckApplied = _paycheckService.ApplyPendingPaychecks(user);
+
+            if (paycheckApplied)
+            {
+                var result = await _userManager.UpdateAsync(user);
+
+                if (!result.Succeeded)
+                {
+                    return StatusCode(
+                        StatusCodes.Status500InternalServerError,
+                        result.Errors);
+                }
+            }
+
             var response = new ApplicationUserProfileResponse
             {
                 Id = user.Id,
@@ -48,9 +65,11 @@ namespace BandLife.Controllers
                 Status = user.Status?.ToList() ?? [],
                 Members = user.Members,
                 Events = user.Events,
+                BankAccount = user.BankAccount,
                 Job = user.Job,
                 JobIncome = user.JobIncome,
                 JobStart = user.JobStart,
+                LastPaycheckAt = user.LastPaycheckAt,
                 BandIncome = user.BandIncome,
                 Popularity = user.Popularity,
                 Listeners = user.Listeners,

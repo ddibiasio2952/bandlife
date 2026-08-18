@@ -3,6 +3,7 @@ using BandLife.Data;
 using BandLife.Models.Domain;
 using BandLife.Models.DTOs;
 using BandLife.Models.DTOs.Events;
+using BandLife.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -25,11 +26,16 @@ namespace BandLife.Controllers
     {
         private readonly BandLifeDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly PaycheckService _paycheckService;
 
-        public EventsController(BandLifeDbContext context, UserManager<ApplicationUser> userManager)
+        public EventsController(
+            BandLifeDbContext context, 
+            UserManager<ApplicationUser> userManager,
+            PaycheckService paycheckService)
         {
             _context = context;
             _userManager = userManager;
+            _paycheckService = paycheckService;
         }
 
         // GET: api/Events
@@ -207,17 +213,29 @@ namespace BandLife.Controllers
 
             user.Members += selectedOption.MembersModifier;
             user.Events += 1;
+
             
-            // Apply replacement values only when an option provides one
+
+
+            // Apply replacement values only when an option provides a new Job
             if (!string.IsNullOrWhiteSpace(selectedOption.NewJob))
             {
+                var now = DateTimeOffset.UtcNow;
+
+                // Pay outstanding wages from the current job before changing it.
+                _paycheckService.ApplyPendingPaychecks(user);
+
+                // Change Job properties
                 user.Job = selectedOption.NewJob;
-                user.JobIncome += selectedOption.JobIncomeModifier;
-                // Record the event and let the server determine the time
-                user.JobStart = DateTimeOffset.UtcNow;
+                user.JobIncome = selectedOption.JobIncomeModifier;
+
+                // Start new Job and Paycheck period
+                user.JobStart = now;
+                user.LastPaycheckAt = now;
             }
 
-            user.BandIncome += selectedOption.BandIncomeModifier;
+            // Add Band Income to Bank Account
+            user.BankAccount += selectedOption.BandIncomeModifier;
 
             // Apply replacement values only when an option provides one
             if (!string.IsNullOrWhiteSpace(selectedOption.NewPopularityLevel))

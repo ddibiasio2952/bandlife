@@ -42,6 +42,7 @@ namespace BandLife.Controllers
                 Status = [],
                 Members = 1,
                 Events = 0,
+                BankAccount = 0,
                 Job = "Jobless",
                 JobIncome = 0,
                 BandIncome = 0,
