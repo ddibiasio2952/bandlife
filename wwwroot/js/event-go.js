@@ -18,6 +18,18 @@ const profileData = await initializeAuthorizedPage([
 const params = new URLSearchParams(window.location.search);
 const eventId = params.get("id");
 
+// Popup modal for showing Option Outcome
+const popupModal = document.getElementById("outcome-modal");
+const outcomeText = document.getElementById("outcome-text");
+const closeModal = document.getElementById("close-outcome-modal");
+
+// Remove Outcome modal display and redirect
+closeModal.addEventListener("click", () => {
+    popupModal.classList.toggle("hidden");
+    // Redirect to Events
+    window.location.href = "/pages/events";
+});
+
 /* Load User's Events */
 const loadedEvent = await loadEventAction(eventId);
 console.log("Loaded Event", loadedEvent);
@@ -27,7 +39,7 @@ if (loadedEvent) {
     renderOptions(loadedEvent);
 }
 
-/* Populate Option Form */
+/* Populate Option Selector */
 function renderOptions(loadedEvent) {
     // Select and fill Event Name and Description Fields
     const nameField = document.querySelector("#name");
@@ -53,8 +65,13 @@ function renderOptions(loadedEvent) {
             console.log("loadedEvent.id: ", loadedEvent.id, " option.id: ", option.id);
             try {
                 const postedOption = await applyOutcome(loadedEvent.id, option.id);
-                console.log(postedOption);
-                window.location.href = "/pages/events";
+                console.log(postedOption.outcome);
+
+                // Show Outcome modal
+                outcomeText.innerHTML = postedOption.outcome;
+                popupModal.classList.remove("hidden");
+                popupModal.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
             } catch (error) {
                 console.error("Error sending option:", error);
             }

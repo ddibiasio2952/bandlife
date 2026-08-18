@@ -11,9 +11,11 @@
         public List<string> Status { get; set; } = [];
         public int Members { get; set; }
         public int Events { get; set; }
+        public int BankAccount { get; set; } = 0;
         public string Job { get; set; } = string.Empty;
         public int JobIncome { get; set; }
         public DateTimeOffset? JobStart { get; set; }
+        public DateTimeOffset? LastPaycheckAt { get; set; }
         public int BandIncome { get; set; }
         public string Popularity { get; set; } = string.Empty;
         public int Listeners { get; set; }

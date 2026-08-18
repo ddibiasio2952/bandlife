@@ -97,6 +97,7 @@ BandLife/
 │ └── DTOs/            API request and response models
 │     └── Events/      Event creation, update, and response DTOs
 ├── ProtectedPages/    Pages restricted by authentication or user role
+├── Services/          Contains logic for applying weekly modifiers
 ├── Sql/               SQL scripts and database-related resources
 ├── wwwroot/
 │   ├── assets/        Icons and images
@@ -168,6 +169,14 @@ https://localhost:<port>/swagger
 ```
 
 Some endpoints require an authenticated account or a specific Identity role.
+
+6. Register or Log In
+   
+You can log in with one of the following accounts from the SQL database backup:
+* email: adminmail@mail.com, password: Password1 (admin user)
+* email: usermail@mail.com, password: Password1 (regular user)
+* email: johndoe@mail.com, password: Password1 (regular user)
+
 
 ## Project Status
 

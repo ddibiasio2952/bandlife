@@ -1,6 +1,7 @@
 using BandLife.Authorization;
 using BandLife.Data;
 using BandLife.Models.Domain;
+using BandLife.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
@@ -45,6 +46,7 @@ builder.Services.AddIdentityApiEndpoints<ApplicationUser>(options =>
     .AddEntityFrameworkStores<BandLifeDbContext>();
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<PaycheckService>();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();

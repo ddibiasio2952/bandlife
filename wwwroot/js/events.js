@@ -15,15 +15,11 @@ const profileData = await initializeAuthorizedPage([
 ]);
 
 if (profileData) {
-    // Populate page
-    //loadProfile(profileData);
-}
-
-// Load Events
-const loadedEvents = await getEvents();
-
+    // Load Events
+    const loadedEvents = await getEvents();
 // Determine which Events to show
-eventChooser(loadedEvents, profileData);
+    eventChooser(loadedEvents, profileData);
+} 
 
 /* Choose Next Events for User */
 function eventChooser(loadedEvents, profileData) {
@@ -36,14 +32,14 @@ function eventChooser(loadedEvents, profileData) {
     // Conditional Processing for Event Queue
     if (profileData.events === 0) {
         /* Load only first event for new User */
-        eventQueue = loadedEvents.splice(0, 1);
+        eventQueue = loadedEvents.slice(0, 1);
 
-    } else if (profileData.events === 1) {
+    } else if (profileData.events <= 2) {
         /* Load member events */
-        eventQueue = loadedEvents.splice(1, 3);
+        eventQueue = loadedEvents.slice(profileData.events, 3);
 
     } else if (profileData.events < loadedEvents.length) {
-        eventQueue = loadedEvents.splice(profileData.events, profileData.events + 5);
+        eventQueue = loadedEvents.slice(profileData.events, profileData.events + 2);
     } else {
         return;
     }
