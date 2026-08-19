@@ -33,7 +33,7 @@ function loadProfile(userData) {
         document.getElementById("releases").textContent = userData.releases;
 
     document.getElementById("job").textContent = userData.job;
-    document.getElementById("bank-account").textContent = userData.bankAccount;
+    document.getElementById("bank-account").textContent = `$${userData.bankAccount}`;
 
 
     document.getElementById("listeners").textContent = userData.listeners;
