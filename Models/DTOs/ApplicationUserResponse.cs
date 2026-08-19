@@ -20,5 +20,6 @@
         public string Popularity { get; set; } = string.Empty;
         public int Listeners { get; set; }
         public List<string> Releases { get; set; } = [];
+        public int[] CompletedEventIds { get; set; } = [];
     }
 }

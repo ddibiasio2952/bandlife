@@ -183,11 +183,27 @@ namespace BandLife.Controllers
             {
                 return Unauthorized();
             }
+
+            // Get CompletedEventId list
+            user.CompletedEventIds ??= new List<int>();
+
+            // Verify the Event has not been completed before
+            if (user.CompletedEventIds.Contains(eventId))
+            {
+                return Conflict(new
+                {
+                    message = "You have already completed this event."
+                });
+            }
+
+            // Get Event Options
             var selectedOption = await _context.EventOptions
                 .AsNoTracking()
                 .FirstOrDefaultAsync(option =>
-            option.Id == request.EventOptionId);
+                    option.Id == request.EventOptionId &&
+                    option.EventId == eventId);
 
+            // Refuse any Option which is null
             if (selectedOption is null)
             {
                 return NotFound(new
@@ -197,6 +213,7 @@ namespace BandLife.Controllers
                 });
             }
 
+            // Refuse any Option which does not belong to the Event
             if (selectedOption.EventId != eventId)
             {
                 return BadRequest(new
@@ -211,11 +228,9 @@ namespace BandLife.Controllers
             // Assign new Status array with previous Status array and selectedOption.Outcome
             user.Status = [.. user.Status, selectedOption.Outcome];
 
+            // Update Member and Event Count Modifiers
             user.Members += selectedOption.MembersModifier;
             user.Events += 1;
-
-            
-
 
             // Apply replacement values only when an option provides a new Job
             if (!string.IsNullOrWhiteSpace(selectedOption.NewJob))
@@ -243,8 +258,11 @@ namespace BandLife.Controllers
                 user.Popularity = selectedOption.NewPopularityLevel;
             }
 
+            // Apply Listener Modifier
             user.Listeners += selectedOption.ListenersModifier;
-            
+
+            // Add the Event Id to the list
+            user.CompletedEventIds.Add(eventId);
 
             // Update User
             var result = await _userManager.UpdateAsync(user);

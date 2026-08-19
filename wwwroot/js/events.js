@@ -17,7 +17,7 @@ const profileData = await initializeAuthorizedPage([
 if (profileData) {
     // Load Events
     const loadedEvents = await getEvents();
-// Determine which Events to show
+    // Determine which Events to show
     eventChooser(loadedEvents, profileData);
 } 
 
@@ -25,27 +25,38 @@ if (profileData) {
 function eventChooser(loadedEvents, profileData) {
     // Initialize empty Event Queue
     let eventQueue;
-
-    console.log("User's Events: ", profileData.events);
-    console.log("Events: ", loadedEvents.length);
+    // Convert completedEventIds Array to Set for faster processing
+    const completedEvents = new Set(profileData.completedEventIds ?? []);
 
     // Conditional Processing for Event Queue
-    if (profileData.events === 0) {
-        /* Load only first event for new User */
+    if (completedEvents.size === 0) {
+        // Load only first event for new User
         eventQueue = loadedEvents.slice(0, 1);
 
-    } else if (profileData.events <= 2) {
-        /* Load member events */
-        eventQueue = loadedEvents.slice(profileData.events, 3);
+    } else if (completedEvents.size <= 2) {
+        // Load events for getting members
+        eventQueue = loadedEvents.slice(1, 3);
 
-    } else if (profileData.events < loadedEvents.length) {
-        eventQueue = loadedEvents.slice(profileData.events, profileData.events + 2);
+    } else if (completedEvents.size < loadedEvents.length) {
+        // Load events in batches of 3 if User's completed events is less than total event count
+        eventQueue = loadedEvents;
     } else {
+        // Load no events if the User's completed events is greater than the total event count
+        // Clear event table and display message
+        clearEventTable();
         return;
     }
 
+    // Filter completed events from Event Queue
+    const remainingEvents = eventFilter(eventQueue, completedEvents);
+
     // Send Event Queue to table
-    populateEventTable(eventQueue);
+    populateEventTable(remainingEvents);
+}
+
+/* Filter completed events from Event Queue */
+function eventFilter(eventQueue, completedEvents) {
+    return eventQueue.filter(event => !completedEvents.has(event.id)).slice(0, 3);
 }
 
 /* Populate Event Table */
@@ -77,4 +88,25 @@ function populateEventTable(eventQueue) {
         // Append row to table body
         tbody.appendChild(row);
     });
+}
+
+/* Clear Event Table */
+function clearEventTable() {
+    // Remove Event table
+    const article = document.querySelector(".content");
+    article.innerHTML = "";
+
+    // Initialize container and text element
+    const div = document.createElement("div");
+    div.id = "outcome-info";
+
+    // Initialize text element, add info for CSS styling and text
+    const span = document.createElement("span");
+    span.id = "description";
+    span.classList.add("completed");
+    span.textContent = "No events available.";
+
+    // Append container and text to container
+    div.appendChild(span);
+    article.appendChild(div);
 }

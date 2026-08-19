@@ -40,6 +40,10 @@ namespace BandLife.Migrations
                     b.Property<int>("BankAccount")
                         .HasColumnType("int");
 
+                    b.PrimitiveCollection<string>("CompletedEventIds")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");

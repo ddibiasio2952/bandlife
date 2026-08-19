@@ -34,6 +34,7 @@ function populateTemplate(elementId, template) {
     }
 }
 
+// Populate page
 populateTemplate("main-nav", mainNavTemplate);
 populateTemplate("main-footer", mainFooterTemplate);
 
@@ -55,4 +56,51 @@ if (document.getElementById("main-nav")) {
         }
 
     });
+}
+
+// Replace placeholders in Status array with User profile properties
+export function formatStatus(status, userData) {
+
+    // String.replace() searches the status string for every placeholder
+    // that matches this regular expression.
+    return status.replace(
+
+        // Match every placeholder as a {{string}} or {{array[0]}}
+        /\{\{([a-zA-Z]\w*)(?:\[(\d+)\])?\}\}/g,
+
+        // Run callback for each placeholder found
+        (placeholder, propertyName, index) => {
+            const propertyValue = userData[propertyName];
+
+            // Leave the original string placeholder unchanged if property not found
+            if (propertyValue === undefined || propertyValue === null) {
+                return placeholder;
+            }
+
+            // Verify array placeholder
+            if (index !== undefined) {
+
+                // Leave the array placeholder unchanged if not index
+                if (!Array.isArray(propertyValue)) {
+                    return placeholder;
+                }
+
+                // Convert index to number and retrieve
+                // Nullish returns the original placeholder if the array item is undefined or null.
+                return propertyValue[Number(index)] ?? placeholder;
+            }
+
+            // Directly insert strings / numbers into the status text if no array index supplied
+            if (
+                typeof propertyValue === "string" ||
+                typeof propertyValue === "number"
+            ) {
+                // Convert the value to a string
+                return String(propertyValue);
+            }
+
+            // Leave the placeholder unchanged for unsupported values (arrays without an index, objects, bool)
+            return placeholder;
+        }
+    );
 }
