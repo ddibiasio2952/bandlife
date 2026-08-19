@@ -115,7 +115,7 @@ The exact folder names may vary as development continues.
 To run BandLife locally, you will need:
 
 * .NET 10 SDK
-* Microsoft SQL Server
+* Microsoft SQL Server 22
 * SQL Server Management Studio or another SQL client
 * A modern web browser
 * Git
@@ -129,7 +129,12 @@ git clone https://github.com/ddibiasio2952/bandlife.git
 cd bandlife
 ```
 
-2. Update the database connection string in `appsettings.json`:
+2. Import the database backup file
+
+Import database.bak from Bandlife\Sql
+
+
+3. Update the database connection string in `appsettings.json`:
 
 ```json
 {
@@ -137,12 +142,6 @@ cd bandlife
     "DefaultConnectionString": "Your SQL Server connection string"
   }
 }
-```
-
-3. Apply the Entity Framework Core migrations:
-
-```bash
-dotnet ef database update
 ```
 
 4. Start the application:
