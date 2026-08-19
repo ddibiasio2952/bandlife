@@ -323,6 +323,7 @@ h4 {
     text-align: center;
 }
 
+/* Event Go Page */
 #outcome-info {
     display: flex;
     flex-direction: row;
@@ -337,9 +338,9 @@ h4 {
     border-radius: 5px;
 }
 
-/* Outcome Modal Popup */
 #outcome-modal.hidden {
-    display: none;
+    visibility: hidden;
+    opacity: 0;
 }
 
 #outcome-modal {
@@ -354,6 +355,11 @@ h4 {
     border-radius: 5px;
     border: 0.1rem solid var(--border);
     background: var(--background);
+
+    /* Transition Properties */
+    visibility: visible;
+    opacity: 1;
+    transition-duration: 0.3s;
 }
 
 #outcome-modal p {
@@ -361,22 +367,10 @@ h4 {
     justify-content: center;
     align-items: center;
 }
-/*
-#close-outcome-modal {
-    display: flex;
-    flex-direction: row;
-    padding: 0;
-    margin: 0 auto;
-    text-align: center;
-    justify-content: center;
-    /*
-    width: 5rem;
-    height: 2rem;
-    cursor: pointer !important;
-    color: var(--background);
-    border-radius: 3px;
-    background-color: var(--border);
-}*/
+
+.completed {
+    color: var(--border);
+}
 
 /* Form */
 .content-head {
@@ -482,7 +476,6 @@ button:active {
 
 input:focus,
 textarea:focus {
-    /*outline: 0.1rem solid var(--focus);*/
     transition-duration: 0.3s;
 }
 
@@ -516,7 +509,6 @@ th:first-of-type {
 th:last-of-type {
     /* Modify Column */
     width: 6rem;
-    /*border-bottom: none;*/
 }
 
 td {
@@ -532,11 +524,6 @@ tr:not(#event-table-header):hover {
     background-color: var(--table-hover);
     transition-duration: 0.5s;
 }
-
-tbody tr:last-of-type td {
-    /*border-bottom: none;*/
-}
-
 
 /* Footer */
 .main-footer {

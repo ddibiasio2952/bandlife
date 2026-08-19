@@ -4,6 +4,7 @@
 
 // Imports
 import { initializeAuthorizedPage, Roles } from "./auth.js";
+import { formatStatus } from "./shared.js";
 
 /* Check if User is logged in with Profile API call */
 // API call
@@ -29,13 +30,11 @@ function loadProfile(userData) {
 
     userData.releases.length === 0 ?
     document.getElementById("releases").textContent = 0 :
-    document.getElementById("releases").textContent = userData.releases;
-    
+        document.getElementById("releases").textContent = userData.releases;
+
     document.getElementById("job").textContent = userData.job;
     document.getElementById("bank-account").textContent = userData.bankAccount;
 
-    /*document.getElementById("job-income").textContent = userData.jobIncome;
-    document.getElementById("band-income").textContent = userData.bandIncome;*/
 
     document.getElementById("listeners").textContent = userData.listeners;
     document.getElementById("popularity").textContent = userData.popularity;
@@ -84,67 +83,20 @@ function loadProfileTextConditional(userData) {
     paragraphOne.textContent =
         paraOneSentOne + paraOneSentTwo + paraOneSentThree + paraOneSentFour;
 
+
     // Display paragraph two contents
     if (userData.status.length > 4) {
+        // Show only last four statuses if > 4
         const latestStatus = userData.status.slice(userData.status.length - 4, userData.status.length);
 
         paragraphTwo.textContent = latestStatus
             .map(status => formatStatus(status, userData))
             .join(" ");
+    } else {
+        // Show all available statuses if <= 4
+        paragraphTwo.textContent = userData.status
+            .map(status => formatStatus(status, userData))
+            .join(" ");
     }
-    /*
-    paragraphTwo.textContent = userData.status
-        .map(status => formatStatus(status, userData))
-        .join(" ");*/
-
-    console.log("Length: ", userData.status.length - 4);
-    console.log("Length: ", userData.status.length);
-    
 }
 
-// Replace placeholders in Status array with User profile properties
-function formatStatus(status, userData) {
-
-    // String.replace() searches the status string for every placeholder
-    // that matches this regular expression.
-    return status.replace(
-
-        // Match every placeholder as a {{string}} or {{array[0]}}
-        /\{\{([a-zA-Z]\w*)(?:\[(\d+)\])?\}\}/g,
-
-        // Run callback for each placeholder found
-        (placeholder, propertyName, index) => {
-            const propertyValue = userData[propertyName];
-
-            // Leave the original string placeholder unchanged if property not found
-            if (propertyValue === undefined || propertyValue === null) {
-                return placeholder;
-            }
-
-            // Verify array placeholder
-            if (index !== undefined) {
-
-                // Leave the array placeholder unchanged if not index
-                if (!Array.isArray(propertyValue)) {
-                    return placeholder;
-                }
-
-                // Convert index to number and retrieve
-                // Nullish returns the original placeholder if the array item is undefined or null.
-                return propertyValue[Number(index)] ?? placeholder;
-            }
-
-            // Directly insert strings / numbers into the status text if no array index supplied
-            if (
-                typeof propertyValue === "string" ||
-                typeof propertyValue === "number"
-            ) {
-                // Convert the value to a string
-                return String(propertyValue);
-            }
-
-            // Leave the placeholder unchanged for unsupported values (arrays without an index, objects, bool)
-            return placeholder;
-        }
-    );
-}

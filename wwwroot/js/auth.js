@@ -15,7 +15,7 @@ export const Roles = Object.freeze({
 
 /* General authentication check */
 export async function initializeAuthorizedPage(allowedRoles) {
-    console.log("Allowed Roles: ", allowedRoles)
+    // console.log("Allowed Roles: ", allowedRoles) Debug
     try {
         // Verify authentication and role
         const authData = await requireRole(allowedRoles);
@@ -26,8 +26,8 @@ export async function initializeAuthorizedPage(allowedRoles) {
 
         // Load profile data for page population
         const profileData = await getProfile();
-        console.log("Auth Data:", authData.roles);
-        console.log("Profile Data:", profileData);
+        //console.log("Auth Data:", authData.roles); Debug
+        //console.log("Profile Data:", profileData); Debug
 
         if (!profileData) {
 

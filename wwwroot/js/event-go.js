@@ -5,6 +5,7 @@
 // Imports
 import { initializeAuthorizedPage, Roles } from "./auth.js";
 import { loadEventAction, applyOutcome } from "./api.js";
+import { formatStatus } from "./shared.js";
 
 /* Check if User is logged in with Profile API call */
 // API call
@@ -16,7 +17,7 @@ const profileData = await initializeAuthorizedPage([
 
 // Get Event Id from URL
 const params = new URLSearchParams(window.location.search);
-const eventId = params.get("id");
+const eventId = Number(params.get("id"));
 
 // Popup modal for showing Option Outcome
 const popupModal = document.getElementById("outcome-modal");
@@ -30,13 +31,32 @@ closeModal.addEventListener("click", () => {
     window.location.href = "/pages/events";
 });
 
-/* Load User's Events */
-const loadedEvent = await loadEventAction(eventId);
-console.log("Loaded Event", loadedEvent);
+// Check if Event is completed
+const eventAvailable = eventCompleteCheck(eventId, profileData.completedEventIds);
 
-// Populate page with Options if Event is loaded
-if (loadedEvent) {
-    renderOptions(loadedEvent);
+if (eventAvailable !== undefined) {
+    console.log("Available");
+
+    // Load Event 
+    const loadedEvent = await loadEventAction(eventAvailable);
+
+    // Populate page with Options if Event is loaded
+    if (loadedEvent) {
+        renderOptions(loadedEvent);
+    }
+} else {
+    console.log("Completed");
+    const descriptionField = document.querySelector("#description");
+    descriptionField.classList.add("completed");
+    descriptionField.innerHTML = "This event has already been completed.";
+}
+
+// Check if event is completed
+function eventCompleteCheck(eventId, completedEventIds) {
+    // Convert completedEventIds Array to Set for faster processing
+    const completedEvents = new Set(completedEventIds ?? []);
+
+    return completedEvents.has(eventId) ? undefined : eventId;
 }
 
 /* Populate Option Selector */
@@ -62,15 +82,18 @@ function renderOptions(loadedEvent) {
         // Add Event Listener to Option Button
         button.addEventListener("click", async () => {
             // Apply Outcome to User Data
-            console.log("loadedEvent.id: ", loadedEvent.id, " option.id: ", option.id);
+            // console.log("loadedEvent.id: ", loadedEvent.id, " option.id: ", option.id); Debug
             try {
                 const postedOption = await applyOutcome(loadedEvent.id, option.id);
-                console.log(postedOption.outcome);
 
+                // Format outcome
+                const formattedOutcome = formatStatus(postedOption.outcome, profileData);
+
+                console.log(formattedOutcome);
                 // Show Outcome modal
-                outcomeText.innerHTML = postedOption.outcome;
+                outcomeText.innerHTML = formattedOutcome;
                 popupModal.classList.remove("hidden");
-                popupModal.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                popupModal.scrollIntoView({ behavior: "smooth", block: "center" });
 
             } catch (error) {
                 console.error("Error sending option:", error);

@@ -73,7 +73,8 @@ namespace BandLife.Controllers
                 BandIncome = user.BandIncome,
                 Popularity = user.Popularity,
                 Listeners = user.Listeners,
-                Releases = user.Releases
+                Releases = user.Releases,
+                CompletedEventIds = user.CompletedEventIds?.ToArray() ?? Array.Empty<int>()
             };
 
             return Ok(response);

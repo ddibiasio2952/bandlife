@@ -15,7 +15,7 @@ const profileData = await initializeAuthorizedPage([
 
 // Get Event Id from URL
 const params = new URLSearchParams(window.location.search);
-const eventId = params.get("id");
+const eventId = Number(params.get("id"));
 
 // Get Event form elements
 const modifyEventButton = document.getElementById("modify-event-button");
@@ -58,7 +58,7 @@ function populateForm(loadedEvent) {
         button.textContent = "Modify";
         button.addEventListener("click", () => {
             popupModal.classList.remove("hidden");
-            popupModal.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            popupModal.scrollIntoView({ behavior: "smooth", block: "center" });
             console.log(option);
             showModifyOption(option);
         });
