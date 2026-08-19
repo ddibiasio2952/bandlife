@@ -159,7 +159,6 @@ The exact port may differ depending on the development environment.
    
 You can log in with one of the following accounts from the SQL database backup:
 * email: adminmail@mail.com, password: Password1 (admin user)
-* email: usermail@mail.com, password: Password1 (regular user)
 * email: johndoe@mail.com, password: Password1 (regular user)
 
 ## API Documentation
