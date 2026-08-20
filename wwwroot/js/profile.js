@@ -72,9 +72,13 @@ function loadProfileTextConditional(userData) {
 
     // Handles releases and listeners sentence
     if (userData.releases.length === 0) {
-        paraOneSentThree = `The band currently has 0 releases and ${userData.listeners} listeners. `
-    } else if (userData.releases.length === 1) {
-        paraOneSentThree = `The band currently has 1 release and ${userData.listeners} listeners. `
+        paraOneSentThree = `The band currently has ${userData.releases.length} releases and ${userData.listeners} listeners. `
+    } else if (userData.releases.length === 0 && userData.listeners === 1) {
+        paraOneSentThree = `The band currently has ${userData.releases.length} releases and ${userData.listeners} listener. `
+    } else if (userData.releases.length === 1 && userData.listeners === 0) {
+        paraOneSentThree = `The band currently has ${userData.releases.length} release and ${userData.listeners} listeners. `
+    } else if (userData.releases.length === 1 && userData.listeners === 1) {
+        paraOneSentThree = `The band currently has ${userData.releases.length} release and ${userData.listeners} listener. `
     } else {
         `The band currently has ${userData.releases.length} releases and ${userData.listeners} listeners. `
     }
