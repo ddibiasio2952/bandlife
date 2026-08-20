@@ -126,7 +126,6 @@ To run BandLife locally, you will need:
 
 ```bash
 git clone https://github.com/ddibiasio2952/bandlife.git
-cd bandlife
 ```
 
 2. Import the database backup file
