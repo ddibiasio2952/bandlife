@@ -26,6 +26,31 @@ The project is inspired by the decision-based gameplay of *NationStates*, adapte
 * Protected pages and API endpoints
 * Desktop browser-based interface
 
+## Project Demo
+
+The repository includes screenshots and video recordings that demonstrate the portal's interface and core workflows without requiring visitors to configure and run the application locally.
+
+### Demo Images
+
+The [`images`](./DemoContent/images) folder contains screenshots of the user profile, event listings, and event gameplay, as well as shots of the admin portal's add event and modify event pages. These images provide a quick visual overview of the user interface and can be viewed directly through GitHub.
+
+![User Profile](./DemoContent/images/user_profile.png)
+
+![Event Play](./DemoContent/images/event_go.png)
+
+
+
+### Demo Videos
+
+The [`videos`](./DemoContent/videos) folder contains recordings that demonstrate interactive features. These videos allow visitors to see how the game is played and how administrators add and modify events.
+
+[User Gameplay and Profile Updates](./DemoContent/videos/gameplay.mp4)
+
+[Admin Add New Event and Modify](./DemoContent/videos/add_modify_event.mp4)
+
+
+
+
 ## How Events Work
 
 Each event contains a description and one or more options. Every option has its own outcome and set of profile modifiers.
